@@ -1,0 +1,18 @@
+version: '3'
+
+tasks:
+  default:
+    desc: List all tasks available.
+    cmds:
+     - task --list-all
+    silent: true
+
+  cluster:apply-namespaces:
+    desc: Apply all namespace.yaml files in the repository.
+    cmds:
+      - |
+        for file in $(find . -name "namespace.yaml"); do
+          echo "Applying $file..."
+          kubectl apply -f $file
+        done
+    silent: true
