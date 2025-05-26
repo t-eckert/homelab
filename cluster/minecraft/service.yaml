@@ -6,6 +6,7 @@ metadata:
   labels:
     app: minecraft
     tailscale.com/proxy-class: "tailscale-proxy"
+    tailscale.com/hostname: "minecraft"
   annotations: {}
 spec:
   type: LoadBalancer

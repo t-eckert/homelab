@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kubectl get events:*)",
+      "Bash(kubectl get pods:*)",
+      "Bash(kubectl logs:*)",
+      "Bash(kubectl get:*)",
+      "Bash(kubectl apply:*)",
+      "Bash(kubectl delete:*)"
+    ],
+    "deny": []
+  }
+}
