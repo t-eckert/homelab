@@ -16,7 +16,8 @@ requests:
     squat.ai/tun: "1"
 ```
 
-To do this, I need to add a `ProxyClass` resource. This is in the `system/tailscale-proxy-class.yaml` file.
+To do this, I need to add a `ProxyClass` resource. This is in the `cluster/system/tailscale-proxy-class.yaml` file.
+To enable the use of `tun`, I also had to add `cluster/system/generic-device-plugin.yaml`
 
 
 ## For Talos
