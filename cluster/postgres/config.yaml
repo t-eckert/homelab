@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: postgres
+data:
+  POSTGRES_DB: "homelab"
+  POSTGRES_USER: "postgres"
+  postgresql.conf: |
+    # Memory settings - optimized for 16GB RAM system
+    shared_buffers = 2GB
+    effective_cache_size = 12GB
+    maintenance_work_mem = 512MB
+    work_mem = 32MB
+    checkpoint_completion_target = 0.9
+    wal_buffers = 32MB
+    default_statistics_target = 100
+    
+    # Storage settings - optimized for NVMe SSD
+    random_page_cost = 1.0
+    seq_page_cost = 1.0
+    effective_io_concurrency = 1000
+    maintenance_io_concurrency = 100
+    
+    # CPU settings - Intel N150 4C/4T
+    max_worker_processes = 4
+    max_parallel_workers_per_gather = 2
+    max_parallel_workers = 4
+    max_parallel_maintenance_workers = 2
+    
+    # Logging
+    log_destination = 'stderr'
+    logging_collector = on
+    log_directory = 'pg_log'
+    log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
+    log_statement = 'error'
+    log_min_duration_statement = 500
+    log_checkpoints = on
+    log_connections = on
+    log_disconnections = on
+    log_lock_waits = on
+    
+    # Connection settings
+    max_connections = 200
+    
+    # Checkpoint settings - optimized for SSD
+    checkpoint_timeout = 10min
+    max_wal_size = 4GB
+    min_wal_size = 1GB
+    
+    # Autovacuum tuning
+    autovacuum_max_workers = 2
+    autovacuum_naptime = 30s
+    autovacuum_vacuum_threshold = 250
+    autovacuum_analyze_threshold = 125
+    
+    # Additional performance settings
+    synchronous_commit = on
+    wal_compression = on
+    wal_level = replica
+    archive_mode = off
