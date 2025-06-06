@@ -1,0 +1,15 @@
+{
+	"account_id": "NQX7TOISFNDJNDQK45N4LQH5YA",
+	"entrypoint": [
+		"psql"
+	],
+	"credentials": [
+		{
+			"plugin": "postgresql",
+			"credential_type": "database_credentials",
+			"usage_id": "database_credentials",
+			"vault_id": "cp5kzpz6l4tpjil56wpsl4gvsq",
+			"item_id": "hlizyk7cofgf46riwizbawxd3u"
+		}
+	]
+}

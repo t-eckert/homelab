@@ -16,3 +16,10 @@ tasks:
           kubectl apply -f $file
         done
     silent: true
+
+  db:access:
+    desc: Open a psql instance against the Homelab Postgres database.
+    cmds:
+      - export PGPASSWORD='$(op read "op://Homelab/Postgres/password")'
+      - psql -h postgres-homelab -p 5432 -U postgres -d homelab
+    silent: true

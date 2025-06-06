@@ -2,6 +2,8 @@
 
 ## Compute
 
+
+
 ### Raspberry Pi 4 B
 
 Hostname: `home-assistant`
