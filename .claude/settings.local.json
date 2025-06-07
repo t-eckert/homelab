@@ -6,8 +6,10 @@
       "Bash(kubectl logs:*)",
       "Bash(kubectl get:*)",
       "Bash(kubectl apply:*)",
-      "Bash(kubectl delete:*)"
+      "Bash(kubectl delete:*)",
+      "Bash(kubectl exec:*)"
     ],
     "deny": []
-  }
+  },
+  "enableAllProjectMcpServers": false
 }
