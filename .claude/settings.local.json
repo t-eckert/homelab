@@ -7,7 +7,8 @@
       "Bash(kubectl get:*)",
       "Bash(kubectl apply:*)",
       "Bash(kubectl delete:*)",
-      "Bash(kubectl exec:*)"
+      "Bash(kubectl exec:*)",
+      "Bash(podman build:*)"
     ],
     "deny": []
   },
