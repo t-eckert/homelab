@@ -6,11 +6,17 @@ const sites = [
 	{
 		title: "Tailscale Dashboard",
 		href: "https://login.tailscale.com/admin/machines",
+		icon: "https://tailscale.com/favicon.png"
 	},
 	{
 		title: "ntfy",
 		href: "https://ntfy.feist-gondola.ts.net/",
 		icon: "/ntfy-icon.ico",
+	},
+	{
+		title: "Home Assistant",
+		href: "http://homeassistant.local:8123/config/integrations/dashboard",
+		icon: "https://play-lh.googleusercontent.com/bGn6qxUHwqZmgtv7RwgxCzl4Uy26SFQrJljVmoOvoIKWa-Xty8s0vOUWcgovUAEAKXnI=w480-h960-rw"
 	},
 ];
 ---
@@ -26,7 +32,7 @@ const sites = [
 	<body class="mx-auto w-full max-w-6xl px-4 py-8">
 		<h1 class="font-semibold text-sm">Homepage</h1>
 
-		<section class="grid grid-cols-6 gap-4 mt-4">
+		<section class="grid grid-cols-5 gap-4 mt-4">
 			{sites.map((site) => (
 				<Site title={site.title} href={site.href} icon={site.icon} />
 			))}

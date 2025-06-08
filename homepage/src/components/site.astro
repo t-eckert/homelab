@@ -11,7 +11,7 @@ const { title, href, icon }: Props = Astro.props;
 
 <a {href} target="_blank" rel="noopener noreferrer"  class="rounded-lg px-1 py-1 hover:bg-gray-100 transition-colors flex items-center justify-start gap-2">
 	{icon && (
-		<img src={icon} alt={`${title} icon`} class="w-5 h-5" />
+		<img src={icon} alt={`${title} icon`} class="w-5 h-5 rounded-lg" />
 	)}
 	<span class="text-gray-800 font-medium hover:text-blue-600 transition-colors">
 		{title}
