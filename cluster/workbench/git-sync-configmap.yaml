@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: git-sync-config
+  namespace: workbench
+data:
+  sync.sh: |
+    #!/bin/bash
+    set -e
+    
+    REPO_URL="https://github.com/t-eckert/workbench.git"
+    REPO_DIR="/workspace"
+    SYNC_INTERVAL=${SYNC_INTERVAL:-300}  # 5 minutes default
+    
+    echo "Git Sync starting..."
+    echo "Repository: $REPO_URL"
+    echo "Directory: $REPO_DIR"
+    echo "Sync interval: ${SYNC_INTERVAL}s"
+    
+    # Initial clone or update
+    if [ ! -d "$REPO_DIR/.git" ]; then
+        echo "Cloning repository..."
+        git clone "$REPO_URL" "$REPO_DIR"
+        cd "$REPO_DIR"
+        git config --global --add safe.directory "$REPO_DIR"
+    else
+        echo "Repository exists, updating..."
+        cd "$REPO_DIR"
+        git config --global --add safe.directory "$REPO_DIR"
+        git fetch origin
+        git reset --hard origin/main
+    fi
+    
+    # Continuous sync loop
+    while true; do
+        echo "$(date): Syncing repository..."
+        cd "$REPO_DIR"
+        
+        # Pull latest changes
+        git fetch origin
+        LOCAL_COMMIT=$(git rev-parse HEAD)
+        REMOTE_COMMIT=$(git rev-parse origin/main)
+        
+        if [ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]; then
+            echo "Changes detected, updating..."
+            git reset --hard origin/main
+            echo "Updated to commit: $(git rev-parse --short HEAD)"
+        else
+            echo "No changes detected"
+        fi
+        
+        # Check for local changes and optionally push them
+        if ! git diff-index --quiet HEAD --; then
+            echo "Local changes detected"
+            # Uncomment to auto-commit and push local changes
+            # git add -A
+            # git commit -m "Auto-commit from Jupyter Lab - $(date)"
+            # git push origin main
+        fi
+        
+        sleep "$SYNC_INTERVAL"
+    done

@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-lab
+  namespace: workbench
+  labels:
+    app: jupyter-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-lab
+  template:
+    metadata:
+      labels:
+        app: jupyter-lab
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: jupyter-lab
+          image: jupyter/scipy-notebook:latest
+          ports:
+            - containerPort: 8888
+              name: jupyter
+              protocol: TCP
+          env:
+            - name: JUPYTER_ENABLE_LAB
+              value: "yes"
+            - name: JUPYTER_TOKEN
+              value: ""  # Disable token for internal access
+            - name: JUPYTER_PASSWORD
+              value: ""  # Disable password for internal access
+            - name: GRANT_SUDO
+              value: "yes"
+            - name: CHOWN_HOME
+              value: "yes"
+            - name: CHOWN_HOME_OPTS
+              value: "-R"
+          command:
+            - "start-notebook.sh"
+          args:
+            - "--NotebookApp.token=''"
+            - "--NotebookApp.password=''"
+            - "--NotebookApp.allow_root=True"
+            - "--NotebookApp.ip='0.0.0.0'"
+            - "--NotebookApp.port=8888"
+            - "--NotebookApp.notebook_dir='/workspace'"
+            - "--NotebookApp.allow_origin='*'"
+            - "--NotebookApp.disable_check_xsrf=True"
+          volumeMounts:
+            - name: workbench-data
+              mountPath: /workspace/data
+            - name: workbench-code
+              mountPath: /workspace/data
+            - name: jupyter-config
+              mountPath: /home/jovyan/.jupyter
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 1500m
+              memory: 4Gi
+          livenessProbe:
+            httpGet:
+              path: /api
+              port: 8888
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api
+              port: 8888
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: true  # Needed for sudo access
+            capabilities:
+              add:
+                - SETUID
+                - SETGID
+            readOnlyRootFilesystem: false
+      volumes:
+        - name: workbench-data
+          persistentVolumeClaim:
+            claimName: workbench-data
+        - name: workbench-code
+          persistentVolumeClaim:
+            claimName: workbench-code
+        - name: jupyter-config
+          emptyDir: {}

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debian
+  namespace: workbench
+  labels:
+    app: debian
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debian
+  template:
+    metadata:
+      labels:
+        app: debian
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: debian
+          image: debian:bookworm
+          command:
+            - sleep
+          args:
+            - infinity
+          volumeMounts:
+            - name: workbench-data
+              mountPath: /workspace/data
+            - name: workbench-code
+              mountPath: /workspace/code
+          securityContext:
+            allowPrivilegeEscalation: true  # Needed for sudo access
+            capabilities:
+              add:
+                - SETUID
+                - SETGID
+            readOnlyRootFilesystem: false
+      volumes:
+        - name: workbench-data
+          persistentVolumeClaim:
+            claimName: workbench-data
+        - name: workbench-code
+          persistentVolumeClaim:
+            claimName: workbench-code
+        - name: jupyter-config
+          emptyDir: {}
