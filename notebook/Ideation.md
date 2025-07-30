@@ -6,6 +6,10 @@ I'd like to move my personal website and blog to run on the server. I can expose
 
 For the different applications I run, I'd like to alias them using DNS to `{name}.thomaseckert.dev`. So `homeassistant.thomaseckert.dev` and `uptimekuma.thomaseckert.dev`.
 
+I wrote a little Astro app that displays a homepage for all of my sites. I want to have this get packaged up and continuously deployed to the homelab.
+
+
+
 ## Maybies...
 
 [Accent](https://www.accent.reviews/) for local translation.
