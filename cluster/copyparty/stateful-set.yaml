@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: copyparty
+  namespace: copyparty
+spec:
+  selector:
+    matchLabels:
+      app: copyparty
+  serviceName: copyparty
+  template:
+    metadata:
+      labels:
+        app: copyparty
+    spec:
+      containers:
+      - name: copyparty
+        image: copyparty/dj:latest
+        args: ["-c", "/cfg/copyparty.conf", "-v", "/data::r:rw,admin"]
+        ports:
+          - containerPort: 3923
+        volumeMounts:
+          - name: data
+            mountPath: "/data"
+          - name: config
+            mountPath: "/cfg"
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: copyparty-config
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

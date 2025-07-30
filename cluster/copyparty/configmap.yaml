@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: copyparty-config
+  namespace: copyparty
+data:
+  copyparty.conf: |
+    [global]
+    p: 3923
+    e2dsa
+    z
+    qr
+    no-robots
+    a: admin:homelab123
