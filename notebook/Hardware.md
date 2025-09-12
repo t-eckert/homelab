@@ -2,13 +2,19 @@
 
 ## Compute
 
+### Bee Link Mini PC
 
+CPU: Intel Twin Lake N150 Processor
+Memory: 16 GB
+Storage: 1 TB
+Network: WiFi 6, LAN 1000M
+Input: 100-240V, 1.9A 50/60Hz
 
 ### Raspberry Pi 4 B
 
 Hostname: `home-assistant`
 IP: `10.0.0.195`
-OS: Talos Linux
+OS: Home Assistant ISO
 Role: Home Assistant
 RAM: 4 GB
 ARCH: ARMv8 64 bit
