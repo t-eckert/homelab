@@ -23,3 +23,28 @@ tasks:
       - export PGPASSWORD=$(op read "op://Homelab/Homelab Postgres/password")
       - psql -h postgres-homelab -p 5432 -U postgres -d homelab
     silent: true
+
+  workbench:ssh:
+    desc: SSH into the workbench Debian instance.
+    cmds:
+      - ssh user@workbench.feist-gondola.ts.net
+    silent: true
+
+  workbench:mount:
+    desc: Mount workbench code and data directories via SSHFS.
+    cmds:
+      - mkdir -p ~/mnt/workbench-code ~/mnt/workbench-data
+      - sshfs user@workbench.feist-gondola.ts.net:/home/user/code ~/mnt/workbench-code
+      - sshfs user@workbench.feist-gondola.ts.net:/home/user/data ~/mnt/workbench-data
+      - echo "Mounted workbench directories:"
+      - echo "  Code: ~/mnt/workbench-code"
+      - echo "  Data: ~/mnt/workbench-data"
+    silent: false
+
+  workbench:unmount:
+    desc: Unmount workbench directories.
+    cmds:
+      - umount ~/mnt/workbench-code || true
+      - umount ~/mnt/workbench-data || true
+      - echo "Unmounted workbench directories"
+    silent: false
