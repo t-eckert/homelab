@@ -54,7 +54,7 @@ spec:
             - name: workbench-data
               mountPath: /workspace/data
             - name: workbench-code
-              mountPath: /workspace/data
+              mountPath: /workspace/code
             - name: jupyter-config
               mountPath: /home/jovyan/.jupyter
           resources:
