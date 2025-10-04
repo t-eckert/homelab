@@ -59,7 +59,7 @@ spec:
               mountPath: /home/jovyan/.jupyter
           resources:
             requests:
-              cpu: 500m
+              cpu: 100m
               memory: 1Gi
             limits:
               cpu: 1500m
