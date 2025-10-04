@@ -3,22 +3,12 @@ kind: Service
 metadata:
   name: field-theories
   namespace: field-theories
-  annotations:
-    tailscale.com/proxy-class: "tailscale-proxy"
-    tailscale.com/hostname: "field-theories"
-    tailscale.com/expose: "true"
-    tailscale.com/funnel: "true"
 spec:
-  type: LoadBalancer
-  loadBalancerClass: tailscale
+  type: ClusterIP
   selector:
     app: field-theories
   ports:
   - name: http
     port: 80
-    targetPort: 4321
-    protocol: TCP
-  - name: https
-    port: 443
     targetPort: 4321
     protocol: TCP
