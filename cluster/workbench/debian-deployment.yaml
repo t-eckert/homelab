@@ -16,34 +16,70 @@ spec:
         app: debian
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
         fsGroup: 1000
       containers:
-        - name: debian
-          image: debian:bookworm
-          command:
-            - sleep
-          args:
-            - infinity
-          volumeMounts:
-            - name: workbench-data
-              mountPath: /workspace/data
-            - name: workbench-code
-              mountPath: /workspace/code
-          securityContext:
-            allowPrivilegeEscalation: true  # Needed for sudo access
-            capabilities:
-              add:
-                - SETUID
-                - SETGID
-            readOnlyRootFilesystem: false
-      volumes:
+      - name: debian
+        image: python:3.13-bookworm
+        command:
+        - /bin/bash
+        - -c
+        - |
+          # Install dependencies
+          apt-get update && apt-get install -y openssh-server sudo curl
+
+          # Create user with sudo access (home dir already exists from volume mounts)
+          useradd -u 1000 -d /home/user -s /bin/bash user || true
+          echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user
+          chmod 440 /etc/sudoers.d/user
+
+          # Create user home directory structure
+          mkdir -p /home/user/.ssh /home/user/.local/bin
+          chmod 700 /home/user/.ssh
+          chown -R 1000:1000 /home/user
+
+          # Install uv for the user
+          su - user -c "curl -LsSf https://astral.sh/uv/install.sh | sh"
+
+          # Configure SSH
+          mkdir -p /run/sshd
+          ssh-keygen -A
+
+          # Configure sshd_config
+          echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+          echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+          echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
+          echo "AllowUsers user" >> /etc/ssh/sshd_config
+
+          # Start SSH daemon
+          /usr/sbin/sshd -D
+        ports:
+        - containerPort: 22
+          name: ssh
+          protocol: TCP
+        volumeMounts:
         - name: workbench-data
-          persistentVolumeClaim:
-            claimName: workbench-data
+          mountPath: /home/user/data
         - name: workbench-code
-          persistentVolumeClaim:
-            claimName: workbench-code
-        - name: jupyter-config
-          emptyDir: {}
+          mountPath: /home/user/code
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+        securityContext:
+          runAsUser: 0
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+            - SETUID
+            - SETGID
+          readOnlyRootFilesystem: false
+      volumes:
+      - name: workbench-data
+        persistentVolumeClaim:
+          claimName: workbench-data
+      - name: workbench-code
+        persistentVolumeClaim:
+          claimName: workbench-code

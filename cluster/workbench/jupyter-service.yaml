@@ -5,15 +5,12 @@ metadata:
   namespace: workbench
   labels:
     app: jupyter-lab
-    tailscale.com/proxy-class: "tailscale-proxy"
-    tailscale.com/hostname: "jupyter"
 spec:
-  type: LoadBalancer
-  loadBalancerClass: tailscale
+  type: ClusterIP
   ports:
-    - port: 80
-      targetPort: jupyter
+    - port: 8888
+      targetPort: 8888
       protocol: TCP
-      name: jupyter
+      name: http
   selector:
     app: jupyter-lab

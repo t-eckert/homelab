@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jupyter
+  namespace: workbench
+spec:
+  defaultBackend:
+    service:
+      name: jupyter-lab
+      port:
+        number: 8888
+  ingressClassName: tailscale
+  tls:
+    - hosts:
+      - jupyter

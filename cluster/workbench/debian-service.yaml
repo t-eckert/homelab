@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: debian
+  namespace: workbench
+  labels:
+    app: debian
+  annotations:
+    tailscale.com/hostname: "workbench"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  ports:
+    - port: 22
+      targetPort: 22
+      protocol: TCP
+      name: ssh
+  selector:
+    app: debian
