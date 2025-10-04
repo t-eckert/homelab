@@ -1,0 +1,8 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: field-theories
+  namespace: field-theories
+spec:
+  image: ghcr.io/t-eckert/field-theories
+  interval: 5m

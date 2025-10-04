@@ -1,0 +1,13 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: field-theories
+  namespace: field-theories
+spec:
+  imageRepositoryRef:
+    name: field-theories
+  policy:
+    alphabetical:
+      order: asc
+  filterTags:
+    pattern: '^latest$'
