@@ -20,6 +20,6 @@ tasks:
   db:access:
     desc: Open a psql instance against the Homelab Postgres database.
     cmds:
-      - export PGPASSWORD='$(op read "op://Homelab/Postgres/password")'
+      - export PGPASSWORD=$(op read "op://Homelab/Homelab Postgres/password")
       - psql -h postgres-homelab -p 5432 -U postgres -d homelab
     silent: true
