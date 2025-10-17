@@ -25,7 +25,13 @@ spec:
         - -c
         - |
           # Install dependencies
-          apt-get update && apt-get install -y openssh-server sudo curl
+          apt-get update && apt-get install -y openssh-server sudo curl git
+
+          # Install GitHub CLI
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          apt-get update && apt-get install -y gh
 
           # Create user with sudo access (home dir already exists from volume mounts)
           useradd -u 1000 -d /home/user -s /bin/bash user || true
@@ -34,8 +40,27 @@ spec:
 
           # Create user home directory structure
           mkdir -p /home/user/.ssh /home/user/.local/bin
+
+          # Copy authorized keys from ConfigMap
+          cp /tmp/ssh-keys/authorized_keys /home/user/.ssh/authorized_keys
+          chmod 600 /home/user/.ssh/authorized_keys
           chmod 700 /home/user/.ssh
           chown -R 1000:1000 /home/user
+
+          # Configure GitHub CLI authentication for user
+          mkdir -p /home/user/.config/gh
+          echo "github.com:" > /home/user/.config/gh/hosts.yml
+          echo "    user: t-eckert" >> /home/user/.config/gh/hosts.yml
+          echo "    oauth_token: $(cat /tmp/github-token/token)" >> /home/user/.config/gh/hosts.yml
+          echo "    git_protocol: https" >> /home/user/.config/gh/hosts.yml
+          chown -R 1000:1000 /home/user/.config
+          chmod 700 /home/user/.config/gh
+          chmod 600 /home/user/.config/gh/hosts.yml
+
+          # Clone workbench repository if not already cloned
+          if [ ! -d /home/user/code/.git ]; then
+            su - user -c "cd /home/user && gh repo clone t-eckert/workbench code"
+          fi
 
           # Install uv for the user
           su - user -c "curl -LsSf https://astral.sh/uv/install.sh | sh"
@@ -61,6 +86,14 @@ spec:
           mountPath: /home/user/data
         - name: workbench-code
           mountPath: /home/user/code
+        - name: workbench-notebooks
+          mountPath: /home/user/notebooks
+        - name: ssh-authorized-keys
+          mountPath: /tmp/ssh-keys
+          readOnly: true
+        - name: github-token
+          mountPath: /tmp/github-token
+          readOnly: true
         resources:
           requests:
             cpu: 100m
@@ -83,3 +116,14 @@ spec:
       - name: workbench-code
         persistentVolumeClaim:
           claimName: workbench-code
+      - name: workbench-notebooks
+        persistentVolumeClaim:
+          claimName: workbench-notebooks
+      - name: ssh-authorized-keys
+        configMap:
+          name: ssh-authorized-keys
+          defaultMode: 0644
+      - name: github-token
+        secret:
+          secretName: github-token
+          defaultMode: 0600

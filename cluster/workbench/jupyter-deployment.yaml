@@ -39,22 +39,35 @@ spec:
               value: "yes"
             - name: CHOWN_HOME_OPTS
               value: "-R"
+            - name: PATH
+              value: "/home/jovyan/.local/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           command:
-            - "start-notebook.sh"
-          args:
-            - "--NotebookApp.token=''"
-            - "--NotebookApp.password=''"
-            - "--NotebookApp.allow_root=True"
-            - "--NotebookApp.ip='0.0.0.0'"
-            - "--NotebookApp.port=8888"
-            - "--NotebookApp.notebook_dir='/workspace'"
-            - "--NotebookApp.allow_origin='*'"
-            - "--NotebookApp.disable_check_xsrf=True"
+            - /bin/bash
+            - -c
+            - |
+              # Install uv
+              curl -LsSf https://astral.sh/uv/install.sh | sh
+
+              # Add uv to PATH for this session
+              export PATH="/home/jovyan/.local/bin:$PATH"
+
+              # Start Jupyter
+              start-notebook.sh \
+                --NotebookApp.token='' \
+                --NotebookApp.password='' \
+                --NotebookApp.allow_root=True \
+                --NotebookApp.ip='0.0.0.0' \
+                --NotebookApp.port=8888 \
+                --NotebookApp.notebook_dir='/workspace' \
+                --NotebookApp.allow_origin='*' \
+                --NotebookApp.disable_check_xsrf=True
           volumeMounts:
             - name: workbench-data
               mountPath: /workspace/data
             - name: workbench-code
               mountPath: /workspace/code
+            - name: workbench-notebooks
+              mountPath: /workspace/notebooks
             - name: jupyter-config
               mountPath: /home/jovyan/.jupyter
           resources:
@@ -94,5 +107,8 @@ spec:
         - name: workbench-code
           persistentVolumeClaim:
             claimName: workbench-code
+        - name: workbench-notebooks
+          persistentVolumeClaim:
+            claimName: workbench-notebooks
         - name: jupyter-config
           emptyDir: {}
