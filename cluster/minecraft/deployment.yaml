@@ -112,6 +112,7 @@ spec:
         - name: tmp
           emptyDir: {}
         - name: datadir
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: minecraft-data
         - name: backupdir
           emptyDir: {}
