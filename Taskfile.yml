@@ -45,3 +45,50 @@ tasks:
       - umount ~/mnt/workbench-data || true
       - echo "Unmounted workbench directories"
     silent: false
+
+  minecraft:status:
+    desc: Check Minecraft server status.
+    cmds:
+      - echo "=== Minecraft Deployment Status ==="
+      - kubectl get deployment minecraft -n minecraft
+      - echo ""
+      - echo "=== Minecraft Pods ==="
+      - kubectl get pods -n minecraft
+      - echo ""
+      - echo "=== Minecraft Resource Usage ==="
+      - kubectl top pod -n minecraft 2>/dev/null || echo "Metrics not available"
+    silent: false
+
+  minecraft:scale-down:
+    desc: Scale down Minecraft server (saves 1Gi+ memory).
+    cmds:
+      - echo "Scaling down Minecraft server..."
+      - "sed -i.bak 's/replicas: 1/replicas: 0/' cluster/minecraft/deployment.yaml"
+      - rm cluster/minecraft/deployment.yaml.bak
+      - echo "Updated deployment.yaml - replicas set to 0"
+      - echo ""
+      - echo "To apply immediately, run:"
+      - echo "  git add cluster/minecraft/deployment.yaml"
+      - echo "  git commit -m 'Scale down Minecraft server'"
+      - echo "  git push"
+      - echo ""
+      - echo "Or wait for Flux to reconcile (~5 minutes)"
+      - 'echo "Or force Flux reconciliation with: flux reconcile kustomization flux-system"'
+    silent: false
+
+  minecraft:scale-up:
+    desc: Scale up Minecraft server.
+    cmds:
+      - echo "Scaling up Minecraft server..."
+      - "sed -i.bak 's/replicas: 0/replicas: 1/' cluster/minecraft/deployment.yaml"
+      - rm cluster/minecraft/deployment.yaml.bak
+      - echo "Updated deployment.yaml - replicas set to 1"
+      - echo ""
+      - echo "To apply immediately, run:"
+      - echo "  git add cluster/minecraft/deployment.yaml"
+      - echo "  git commit -m 'Scale up Minecraft server'"
+      - echo "  git push"
+      - echo ""
+      - echo "Or wait for Flux to reconcile (~5 minutes)"
+      - 'echo "Or force Flux reconciliation with: flux reconcile kustomization flux-system"'
+    silent: false
