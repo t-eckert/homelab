@@ -8,6 +8,6 @@ spec:
     name: field-theories
   policy:
     alphabetical:
-      order: asc
+      order: desc  # Get the most recent SHA tag
   filterTags:
-    pattern: '^latest$'
+    pattern: '^sha-[a-f0-9]+$'  # Match SHA-based tags
