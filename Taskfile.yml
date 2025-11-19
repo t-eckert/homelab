@@ -66,15 +66,7 @@ tasks:
       - "sed -i.bak 's/replicas: 1/replicas: 0/' cluster/minecraft/deployment.yaml"
       - rm cluster/minecraft/deployment.yaml.bak
       - echo "Updated deployment.yaml - replicas set to 0"
-      - echo ""
-      - echo "To apply immediately, run:"
-      - echo "  git add cluster/minecraft/deployment.yaml"
-      - echo "  git commit -m 'Scale down Minecraft server'"
-      - echo "  git push"
-      - echo ""
-      - echo "Or wait for Flux to reconcile (~5 minutes)"
-      - 'echo "Or force Flux reconciliation with: flux reconcile kustomization flux-system"'
-    silent: false
+    silent: true
 
   minecraft:scale-up:
     desc: Scale up Minecraft server.
@@ -83,12 +75,4 @@ tasks:
       - "sed -i.bak 's/replicas: 0/replicas: 1/' cluster/minecraft/deployment.yaml"
       - rm cluster/minecraft/deployment.yaml.bak
       - echo "Updated deployment.yaml - replicas set to 1"
-      - echo ""
-      - echo "To apply immediately, run:"
-      - echo "  git add cluster/minecraft/deployment.yaml"
-      - echo "  git commit -m 'Scale up Minecraft server'"
-      - echo "  git push"
-      - echo ""
-      - echo "Or wait for Flux to reconcile (~5 minutes)"
-      - 'echo "Or force Flux reconciliation with: flux reconcile kustomization flux-system"'
-    silent: false
+    silent: true
