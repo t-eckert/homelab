@@ -1,0 +1,26 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: uptime-kuma-backup
+  namespace: uptime-kuma
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: uptime-kuma-backup
+  namespace: uptime-kuma
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: uptime-kuma-backup
+subjects:
+  - kind: ServiceAccount
+    name: uptime-kuma
+    namespace: uptime-kuma
