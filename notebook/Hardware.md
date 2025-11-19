@@ -22,7 +22,7 @@ ARCH: ARMv8 64 bit
 ### Raspberry Pi 4 B
 
 IP: `10.0.0.70`
-OS: Talos Linux
+OS: Talos Linux -> Changing this to Nix
 Role: Control Plane
 RAM: 1 GB
 ARCH: ARMv8 64 bit
