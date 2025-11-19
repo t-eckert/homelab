@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-web
+  namespace: pihole
+  labels:
+    app: pihole
+    tailscale.com/proxy-class: "tailscale-proxy"
+    tailscale.com/hostname: "pihole"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: pihole
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-dns-tcp
+  namespace: pihole
+  labels:
+    app: pihole
+    tailscale.com/proxy-class: "tailscale-proxy"
+    tailscale.com/hostname: "pihole-dns"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  ports:
+    - name: dns-tcp
+      port: 53
+      targetPort: dns-tcp
+      protocol: TCP
+  selector:
+    app: pihole
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-dns-udp
+  namespace: pihole
+  labels:
+    app: pihole
+    tailscale.com/proxy-class: "tailscale-proxy"
+    tailscale.com/hostname: "pihole-dns"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  externalTrafficPolicy: Local
+  ports:
+    - name: dns-udp
+      port: 53
+      targetPort: dns-udp
+      protocol: UDP
+  selector:
+    app: pihole
