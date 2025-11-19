@@ -18,6 +18,8 @@ The cluster uses Tailscale for external access and local-path-provisioner for st
   - `system/` - Core cluster components (storage, networking, device plugins)
   - `[service]/` - Service-specific deployments (minecraft, ntfy, uptime-kuma)
 - `notebook/` - Technical documentation and setup guides
+  - Documentation files use Title Case naming (e.g., `Home Assistant.md`, `Transfer Domain to Cloudflare.md`)
+  - `notebook/plans/` - Write detailed implementation plans and procedures here using Title Case naming
 - Service directories - Additional configuration files
 
 ## Common Commands
