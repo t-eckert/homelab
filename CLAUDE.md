@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a Kubernetes homelab running on Talos Linux with Raspberry Pi hardware:
-- Single-node control plane (Pi 4B 1GB, IP: 10.0.0.70)
-- Separate Home Assistant instance (Pi 4B 4GB, IP: 10.0.0.195)
-- Agent node (Pi 3B v2, IP: 10.0.0.232)
+This is a Kubernetes homelab running on Talos Linux:
+- Single-node control plane on Bee Machine (IP: 10.0.0.67)
+  - Running Talos v1.11.5, Kubernetes v1.33.0
+- Separate Home Assistant instance (IP: 10.0.0.195, not part of K8s cluster)
 
 The cluster uses Tailscale for external access and local-path-provisioner for storage.
 
