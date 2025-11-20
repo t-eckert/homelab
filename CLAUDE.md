@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Kubernetes homelab running on Talos Linux:
 - Single-node control plane on Bee Machine (IP: 10.0.0.67)
-  - Running Talos v1.11.5, Kubernetes v1.33.0
+  - Running Talos v1.11.5, Kubernetes v1.34.2
 - Separate Home Assistant instance (IP: 10.0.0.195, not part of K8s cluster)
 
 The cluster uses Tailscale for external access and local-path-provisioner for storage.

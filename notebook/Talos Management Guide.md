@@ -7,7 +7,7 @@
 - **Node**: talos-84a-hmg at 10.0.0.67
 - **Role**: Control Plane (single-node cluster)
 - **Talos Version**: v1.11.5
-- **Kubernetes Version**: v1.33.0
+- **Kubernetes Version**: v1.34.2
 - **Age**: 180 days
 - **Network**: Flannel CNI
 
