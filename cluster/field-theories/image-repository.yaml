@@ -6,3 +6,5 @@ metadata:
 spec:
   image: ghcr.io/t-eckert/field-theories
   interval: 5m
+  secretRef:
+    name: ghcr-credentials
