@@ -4,6 +4,7 @@
 
 ### Bee Link Mini PC
 
+IP: `10.0.0.67`
 CPU: Intel Twin Lake N150 Processor
 Memory: 16 GB
 Storage: 1 TB

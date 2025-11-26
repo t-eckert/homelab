@@ -1,12 +1,6 @@
 # Setting up Talos
 
-##
-
-
-
-
-This document will guide you through the process of installing Talos Linux
-on a Raspberry Pi and running Homecluster.
+This document will guide you through the process of installing Talos Linux on a Raspberry Pi and running Homecluster.
 
 ## Prerequisites
 
