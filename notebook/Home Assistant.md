@@ -2,7 +2,6 @@
 
 ## Installing on Raspberry Pi
 
-
 ## Reference
 
 - [Documentation](https://www.home-assistant.io/installation/raspberrypi/)

@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: bluesky-poster
-  namespace: field-theories
+  namespace: bluesky-poster
 spec:
   # Run every hour at minute 0
   schedule: "0 * * * *"
@@ -16,10 +16,22 @@ spec:
             app: bluesky-poster
         spec:
           restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
           containers:
           - name: bluesky-poster
             image: ghcr.io/t-eckert/field-theories-bluesky-poster:latest
             imagePullPolicy: Always
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
             env:
             - name: RSS_FEED_URL
               value: "https://fieldtheories.blog/rss.xml"

@@ -1,0 +1,79 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: field-theories-isolation
+  namespace: field-theories
+spec:
+  podSelector:
+    matchLabels:
+      app: field-theories
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from cloudflared pods only
+  - from:
+    - podSelector:
+        matchLabels:
+          app: cloudflared
+    ports:
+    - protocol: TCP
+      port: 4321
+  egress:
+  # Allow DNS resolution
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloudflared-isolation
+  namespace: field-theories
+spec:
+  podSelector:
+    matchLabels:
+      app: cloudflared
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow health checks from kubelet
+  - from:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 2000
+  egress:
+  # Allow connection to field-theories service
+  - to:
+    - podSelector:
+        matchLabels:
+          app: field-theories
+    ports:
+    - protocol: TCP
+      port: 4321
+  # Allow DNS resolution
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+  # Allow outbound to Cloudflare edge (internet)
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 7844
+    - protocol: UDP
+      port: 443

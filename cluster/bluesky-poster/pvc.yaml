@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: bluesky-poster-data
-  namespace: field-theories
+  namespace: bluesky-poster
 spec:
   accessModes:
     - ReadWriteOnce

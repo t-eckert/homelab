@@ -23,8 +23,8 @@ ARCH: ARMv8 64 bit
 ### Raspberry Pi 4 B
 
 IP: `10.0.0.70`
-OS: Talos Linux -> Changing this to Nix
-Role: Control Plane
+OS: Changing this to Nix
+Role: Nix learning environment
 RAM: 1 GB
 ARCH: ARMv8 64 bit
 
@@ -32,7 +32,7 @@ ARCH: ARMv8 64 bit
 
 IP: `10.0.0.232`
 OS: Raspbian
-Role: [`quadratic-crab`](../agents/quadratic-crab)
+Role: Linux play environment
 RAM: 1 GB
 ARCH: ARMv8 64 bit
 

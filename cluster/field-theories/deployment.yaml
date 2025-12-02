@@ -16,11 +16,24 @@ spec:
         tailscale.com/expose: "true"
         tailscale.com/funnel: "true"
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: field-theories
         image: ghcr.io/t-eckert/field-theories:20251128-2006-sha-fe3d065 # {"$imagepolicy": "field-theories:field-theories"}
         ports:
         - containerPort: 4321
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
         resources:
           requests:
             memory: "64Mi"

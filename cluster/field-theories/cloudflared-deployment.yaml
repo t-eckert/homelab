@@ -15,14 +15,26 @@ spec:
       labels:
         app: cloudflared
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: cloudflared
-        image: cloudflare/cloudflared:latest
+        image: cloudflare/cloudflared:2025.11.1
         args:
         - tunnel
         - --config
         - /etc/cloudflared/config/config.yaml
         - run
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
         livenessProbe:
           httpGet:
             path: /ready
