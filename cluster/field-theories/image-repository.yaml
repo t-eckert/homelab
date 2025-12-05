@@ -8,3 +8,6 @@ spec:
   interval: 5m
   secretRef:
     name: ghcr-credentials
+  exclusionList:
+  - ^.*\.sig$
+  - ^sha-[a-f0-9]+$  # Exclude SHA-only tags to focus on timestamped tags

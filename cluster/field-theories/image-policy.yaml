@@ -6,8 +6,8 @@ metadata:
 spec:
   imageRepositoryRef:
     name: field-theories
-  policy:
-    alphabetical:
-      order: desc  # Get the most recent timestamp (newest = highest)
   filterTags:
     pattern: '^[0-9]{8}-[0-9]{4}-sha-[a-f0-9]+$'  # Match timestamp-SHA tags (YYYYMMDD-HHMM-sha-xxxxx)
+  policy:
+    alphabetical:
+      order: desc  # Get the most recent timestamp (newest = highest alphabetically)
