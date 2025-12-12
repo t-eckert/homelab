@@ -14,4 +14,4 @@ resources:
 # Override the image at apply-time without modifying deployment.yaml in Git
 images:
   - name: ghcr.io/t-eckert/field-theories
-    newTag: 20251205-0718-sha-8d175df  # Update this manually when needed
+    newTag: 20251212-0322-sha-f59352a  # Update this manually when needed
