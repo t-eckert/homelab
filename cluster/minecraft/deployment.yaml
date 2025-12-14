@@ -33,7 +33,7 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 1024Mi
+              memory: 768Mi
           readinessProbe:
             exec:
               command:
@@ -56,7 +56,7 @@ spec:
             - name: EULA
               value: "true"
             - name: TYPE
-              value: "VANILLA"
+              value: "PAPER"
             - name: VERSION
               value: "LATEST"
             - name: DIFFICULTY
@@ -84,7 +84,7 @@ spec:
             - name: MODRINTH_ALLOWED_VERSION_TYPE
               value: "release"
             - name: MEMORY
-              value: "1024M"
+              value: "768M"
             - name: OVERRIDE_SERVER_PROPERTIES
               value: "false"
             - name: ENABLE_RCON
