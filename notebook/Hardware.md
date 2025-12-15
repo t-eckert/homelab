@@ -4,7 +4,9 @@
 
 ### Bee Link Mini PC
 
-IP: `10.0.0.67`
+Hostname: `homelab`
+Local IP: `10.0.0.67`
+Tailscale Address: `https://homelab.fiest-gondola.ts.net`
 CPU: Intel Twin Lake N150 Processor
 Memory: 16 GB
 Storage: 1 TB
