@@ -6,7 +6,7 @@ const sites = [
 	{
 		title: "Tailscale Dashboard",
 		href: "https://login.tailscale.com/admin/machines",
-		icon: "https://tailscale.com/favicon.png"
+		icon: "https://tailscale.com/favicon.png",
 	},
 	{
 		title: "ntfy",
@@ -16,7 +16,7 @@ const sites = [
 	{
 		title: "Home Assistant",
 		href: "http://homeassistant.local:8123/config/integrations/dashboard",
-		icon: "https://play-lh.googleusercontent.com/bGn6qxUHwqZmgtv7RwgxCzl4Uy26SFQrJljVmoOvoIKWa-Xty8s0vOUWcgovUAEAKXnI=w480-h960-rw"
+		icon: "https://play-lh.googleusercontent.com/bGn6qxUHwqZmgtv7RwgxCzl4Uy26SFQrJljVmoOvoIKWa-Xty8s0vOUWcgovUAEAKXnI=w480-h960-rw",
 	},
 ];
 ---
@@ -29,13 +29,44 @@ const sites = [
 		<meta name="generator" content={Astro.generator} />
 		<title>Homepage</title>
 	</head>
-	<body class="mx-auto w-full max-w-6xl px-4 py-8">
-		<h1 class="font-semibold text-sm">Homepage</h1>
+	<body class="bg-stone-950 text-white">
+		<div
+			class="p-3 flex flex-row justify-between border-b border-stone-800"
+		>
+			<h1 class="font-semibold text-sm">Homepage</h1>
+			<a
+				href="https://github.com/t-eckert/homelab"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="px-2 py-0.5 rounded-full bg-stone-900 font-medium text-sm"
+				>Repo</a
+			>
+		</div>
 
-		<section class="grid grid-cols-5 gap-4 mt-4">
-			{sites.map((site) => (
-				<Site title={site.title} href={site.href} icon={site.icon} />
-			))}
+		<section
+			class:list={[
+				"grid",
+				"grid-cols-1",
+				"sm:grid-cols-2",
+				"md:grid-cols-3",
+				"lg:grid-cols-4",
+				"xl:grid-cols-5",
+				"gap-4",
+				"mt-4",
+				"mx-auto",
+				"max-w-7xl",
+				"p-3",
+			]}
+		>
+			{
+				sites.map((site) => (
+					<Site
+						title={site.title}
+						href={site.href}
+						icon={site.icon}
+					/>
+				))
+			}
 		</section>
 	</body>
 </html>

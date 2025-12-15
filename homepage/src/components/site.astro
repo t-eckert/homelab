@@ -8,12 +8,33 @@ interface Props {
 const { title, href, icon }: Props = Astro.props;
 ---
 
-
-<a {href} target="_blank" rel="noopener noreferrer"  class="rounded-lg px-1 py-1 hover:bg-gray-100 transition-colors flex items-center justify-start gap-2">
-	{icon && (
-		<img src={icon} alt={`${title} icon`} class="w-5 h-5 rounded-lg" />
-	)}
-	<span class="text-gray-800 font-medium hover:text-blue-600 transition-colors">
-		{title}
-	</span>
+<a
+	{href}
+	target="_blank"
+	rel="noopener noreferrer"
+	class:list={[
+		"rounded-lg",
+		"p-3",
+		"bg-stone-800",
+		"hover:bg-stone-100",
+		"transition-colors",
+		"flex",
+		"flex-col",
+		"gap-2",
+	]}
+>
+	<div class="flex justify-start items-center gap-3">
+		{
+			icon ? (
+				<img src={icon} alt={`${title} icon`} class="w-6 h-6 rounded" />
+			) : (
+				<div class="w-8 h-8 rounded bg-stone-600 flex items-center justify-center text-white font-semibold">
+					{title.charAt(0).toUpperCase()}
+				</div>
+			)
+		}
+		<span class="font-medium">
+			{title}
+		</span>
+	</div>
 </a>
