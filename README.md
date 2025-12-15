@@ -21,7 +21,7 @@ This is a [Talos Linux](https://www.talos.dev/) cluster where I run most of my a
 - [Uptime Kuma](https://github.com/louislam/uptime-kuma): An uptime monitoring application
 - **Workbench**: A Debian instance and [Jupyter Lab](https://jupyter.org/) with a shared drive for personal data analysis projects
 
-## Home Assistant
+### Home Assistant
 
 This runs on a dedicated Raspberry Pi 4 B.
 
