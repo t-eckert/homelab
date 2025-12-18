@@ -1,24 +1,36 @@
 ---
 import "../global.css";
+import { getCollection } from "astro:content";
 import Site from "../components/site.astro";
 
-const sites = [
-	{
-		title: "Tailscale Dashboard",
-		href: "https://login.tailscale.com/admin/machines",
-		icon: "https://tailscale.com/favicon.png",
+// Fetch all links from the collection
+const allLinks = await getCollection("links");
+
+// Define the display order of sections
+const sectionOrder = [
+	"Monitoring",
+	"Productivity",
+	"Utilities",
+	"Content",
+	"Smart Home",
+	"External",
+] as const;
+
+// Group links by section and sort by order field
+const linksBySection = sectionOrder.reduce(
+	(acc, section) => {
+		const sectionLinks = allLinks
+			.filter((link) => link.data.section === section)
+			.sort((a, b) => a.data.order - b.data.order);
+
+		if (sectionLinks.length > 0) {
+			acc[section] = sectionLinks;
+		}
+
+		return acc;
 	},
-	{
-		title: "ntfy",
-		href: "https://ntfy.feist-gondola.ts.net/",
-		icon: "/ntfy-icon.ico",
-	},
-	{
-		title: "Home Assistant",
-		href: "http://homeassistant.local:8123/config/integrations/dashboard",
-		icon: "https://play-lh.googleusercontent.com/bGn6qxUHwqZmgtv7RwgxCzl4Uy26SFQrJljVmoOvoIKWa-Xty8s0vOUWcgovUAEAKXnI=w480-h960-rw",
-	},
-];
+	{} as Record<string, typeof allLinks>,
+);
 ---
 
 <html lang="en">
@@ -43,30 +55,45 @@ const sites = [
 			>
 		</div>
 
-		<section
-			class:list={[
-				"grid",
-				"grid-cols-1",
-				"sm:grid-cols-2",
-				"md:grid-cols-3",
-				"lg:grid-cols-4",
-				"xl:grid-cols-5",
-				"gap-4",
-				"mt-4",
-				"mx-auto",
-				"max-w-7xl",
-				"p-3",
-			]}
-		>
+		<div class="mx-auto max-w-7xl p-3">
 			{
-				sites.map((site) => (
-					<Site
-						title={site.title}
-						href={site.href}
-						icon={site.icon}
-					/>
-				))
+				sectionOrder.map((sectionName) => {
+					const sectionLinks = linksBySection[sectionName];
+
+					// Skip if section has no links
+					if (!sectionLinks) return null;
+
+					return (
+						<section class="mb-8">
+							{/* Section Header */}
+							<h2 class="text-xl font-semibold mb-4 text-stone-300 border-b border-stone-800 pb-2">
+								{sectionName}
+							</h2>
+
+							{/* Links Grid */}
+							<div
+								class:list={[
+									"grid",
+									"grid-cols-1",
+									"sm:grid-cols-2",
+									"md:grid-cols-3",
+									"lg:grid-cols-4",
+									"xl:grid-cols-5",
+									"gap-4",
+								]}
+							>
+								{sectionLinks.map((link) => (
+									<Site
+										title={link.data.title}
+										href={link.data.href}
+										icon={link.data.icon}
+									/>
+								))}
+							</div>
+						</section>
+					);
+				})
 			}
-		</section>
+		</div>
 	</body>
 </html>

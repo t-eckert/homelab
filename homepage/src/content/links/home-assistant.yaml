@@ -1,0 +1,5 @@
+title: Home Assistant
+href: http://homeassistant.local:8123/config/integrations/dashboard
+icon: https://play-lh.googleusercontent.com/bGn6qxUHwqZmgtv7RwgxCzl4Uy26SFQrJljVmoOvoIKWa-Xty8s0vOUWcgovUAEAKXnI=w480-h960-rw
+section: Smart Home
+order: 1

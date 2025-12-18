@@ -16,7 +16,7 @@ const { title, href, icon }: Props = Astro.props;
 		"rounded-lg",
 		"p-3",
 		"bg-stone-800",
-		"hover:bg-stone-100",
+		"hover:bg-stone-700",
 		"transition-colors",
 		"flex",
 		"flex-col",
@@ -28,7 +28,7 @@ const { title, href, icon }: Props = Astro.props;
 			icon ? (
 				<img src={icon} alt={`${title} icon`} class="w-6 h-6 rounded" />
 			) : (
-				<div class="w-8 h-8 rounded bg-stone-600 flex items-center justify-center text-white font-semibold">
+				<div class="w-6 h-6 rounded bg-stone-600 flex items-center justify-center text-white font-semibold">
 					{title.charAt(0).toUpperCase()}
 				</div>
 			)
