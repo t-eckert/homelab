@@ -29,6 +29,10 @@ spec:
         - name: filebrowser
           image: docker.io/filebrowser/filebrowser:latest
           imagePullPolicy: IfNotPresent
+          args:
+            - --root=/srv
+            - --database=/database/filebrowser.db
+            - --noauth=false
           ports:
             - name: http
               containerPort: 80
