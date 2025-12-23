@@ -13,6 +13,7 @@ This is a [Talos Linux](https://www.talos.dev/) cluster where I run most of my a
 - [Field Theories](https://fieldtheories.blog): My personal blog built in Astro.
 - **Field Theories BlueSky Sync**: A lightweight Rust application for posting new blog posts to BlueSky and syncing back responses as comments on them. (STILL IN PROGRESS)
 - [Flux](https://fluxcd.io/): A popular, lightweight CI operator for auto-updating the cluster based on Git config.
+- [Jellyfin](https://jellyfin.org/): For media management
 - [Minecraft Server](https://github.com/itzg/docker-minecraft-server): It's Minecraft! I scale this up and down because it's resource intensive-ish
 - **Monitoring**: Grafana+Prometheus+Loki+Promtail monitoring setup
 - [NTFY](https://ntfy.sh/): Self hosted push notifications
