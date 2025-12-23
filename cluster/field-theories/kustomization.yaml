@@ -4,7 +4,6 @@ resources:
   - namespace.yaml
   - deployment.yaml
   - service.yaml
-  - cloudflared-secret.yaml
   - cloudflared-deployment.yaml
   - network-policy.yaml
   - image-repository.yaml
@@ -13,4 +12,4 @@ resources:
 # Override the image at apply-time without modifying deployment.yaml in Git
 images:
   - name: ghcr.io/t-eckert/field-theories
-    newTag: 20251212-0322-sha-f59352a  # Update this manually when needed
+    newTag: 20251222-0428-sha-82755cd  # Update this manually when needed
