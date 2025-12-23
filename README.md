@@ -2,6 +2,70 @@
 
 This repo contains all of the scripts, definitions, and notes for my homelab.
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         Talos Linux K8s Cluster                             │
+│                         Bee Machine (10.0.0.67)                             │
+│                    Talos v1.11.5 • Kubernetes v1.34.2                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ System Components                                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Flux CD                    - GitOps continuous delivery                  │
+│  • Local Path Provisioner     - Dynamic PV provisioning                     │
+│  • Tailscale Operator         - Secure external access                      │
+│  • Generic Device Plugin      - TUN device access for Tailscale             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Applications & Services                                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Personal Projects                                                          │
+│  ├─ Artemis                   - Job search application                      │
+│  ├─ Field Theories            - Personal blog (Astro)                       │
+│  │  └─ Cloudflared           - Cloudflare Tunnel                           │
+│  └─ Field Theories BS Sync    - BlueSky integration (Rust)                  │
+│                                                                             │
+│  Media & File Management                                                    │
+│  ├─ Jellyfin                  - Media server                                │
+│  │  └─ FileBrowser           - Web-based file manager                      │
+│  ├─ CopyParty                 - File sharing server                         │
+│  └─ Fave                      - Bookmark manager                            │
+│                                                                             │
+│  Infrastructure & Utilities                                                 │
+│  ├─ PostgreSQL                - Shared database server                      │
+│  ├─ NTFY                      - Push notification service                   │
+│  ├─ Uptime Kuma               - Uptime monitoring                           │
+│  └─ Umami                     - Web analytics                               │
+│                                                                             │
+│  Monitoring Stack                                                           │
+│  ├─ Grafana                   - Dashboards & visualization                  │
+│  ├─ Prometheus                - Metrics collection                          │
+│  ├─ Loki                      - Log aggregation                             │
+│  ├─ Promtail                  - Log shipping                                │
+│  └─ Kube State Metrics        - Kubernetes metrics                          │
+│                                                                             │
+│  Development & Gaming                                                       │
+│  ├─ Workbench                                                               │
+│  │  ├─ Debian                 - Development container                       │
+│  │  └─ Jupyter Lab            - Interactive notebooks                       │
+│  └─ Minecraft Server          - Game server (scaled on demand)              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Separate Infrastructure                                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Home Assistant (10.0.0.195)  - Raspberry Pi 4 B                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Legend: StatefulSets use persistent storage • Tailscale provides secure ingress
+```
+
 ## What I'm Running
 
 ### Cluster
