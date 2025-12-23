@@ -31,7 +31,6 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - --root=/srv
-            - --database=/database/filebrowser.db
             - --noauth=false
           ports:
             - name: http
