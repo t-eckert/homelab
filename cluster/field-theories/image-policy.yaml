@@ -7,7 +7,7 @@ spec:
   imageRepositoryRef:
     name: field-theories
   filterTags:
-    pattern: '^[0-9]{8}-[0-9]{4}-sha-[a-f0-9]+$'  # Match timestamp-SHA tags (YYYYMMDD-HHMM-sha-xxxxx)
+    pattern: '^20[0-9]{6}-[0-9]{4}-sha-[a-f0-9]+$'  # Match timestamp-SHA tags
   policy:
     alphabetical:
       order: desc  # Get the most recent timestamp (newest = highest alphabetically)
