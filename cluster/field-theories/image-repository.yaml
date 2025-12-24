@@ -6,8 +6,6 @@ metadata:
 spec:
   image: ghcr.io/t-eckert/field-theories
   interval: 5m
-  secretRef:
-    name: ghcr-credentials
   exclusionList:
   - ^.*\.sig$
   - ^sha-[a-f0-9]+$  # Exclude SHA-only tags to focus on timestamped tags
