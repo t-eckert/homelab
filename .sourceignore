@@ -1,3 +1,2 @@
 # Flux source ignore patterns
-# Exclude field-theories directory from Flux sync
-/cluster/field-theories/
+# (Currently empty - all directories are synced)
