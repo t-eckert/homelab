@@ -25,8 +25,8 @@ ARCH: ARMv8 64 bit
 ### Raspberry Pi 4 B
 
 IP: `10.0.0.70`
-OS: Changing this to Nix
-Role: Nix learning environment
+OS: Debian
+Role: SDR Receiver
 RAM: 1 GB
 ARCH: ARMv8 64 bit
 

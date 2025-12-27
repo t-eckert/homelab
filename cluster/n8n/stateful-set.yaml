@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: n8n
+  namespace: n8n
+spec:
+  selector:
+    matchLabels:
+      app: n8n
+  serviceName: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      containers:
+      - name: n8n
+        image: n8nio/n8n:latest
+        ports:
+        - containerPort: 5678
+          name: http
+        env:
+        - name: N8N_PORT
+          value: "5678"
+        - name: N8N_PROTOCOL
+          value: "http"
+        - name: N8N_SECURE_COOKIE
+          value: "false"
+        - name: WEBHOOK_URL
+          value: "http://n8n.feist-gondola.ts.net"
+        - name: N8N_HOST
+          value: "n8n.feist-gondola.ts.net"
+        volumeMounts:
+        - name: data
+          mountPath: /home/node/.n8n
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
