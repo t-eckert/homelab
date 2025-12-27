@@ -3,3 +3,39 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
+patches:
+- patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 30m
+  target:
+    kind: Deployment
+    name: helm-controller
+- patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 30m
+  target:
+    kind: Deployment
+    name: image-automation-controller
+- patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 30m
+  target:
+    kind: Deployment
+    name: kustomize-controller
+- patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 30m
+  target:
+    kind: Deployment
+    name: notification-controller
+- patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 30m
+  target:
+    kind: Deployment
+    name: image-reflector-controller
