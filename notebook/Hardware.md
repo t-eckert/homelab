@@ -4,39 +4,39 @@
 
 ### Bee Link Mini PC
 
-Hostname: `homelab`
-Local IP: `10.0.0.67`
-Tailscale Address: `https://homelab.fiest-gondola.ts.net`
-CPU: Intel Twin Lake N150 Processor
-Memory: 16 GB
-Storage: 1 TB
-Network: WiFi 6, LAN 1000M
-Input: 100-240V, 1.9A 50/60Hz
+Hostname: `homelab`  
+Local IP: `10.0.0.67`  
+Tailscale Address: `https://homelab.fiest-gondola.ts.net`  
+CPU: Intel Twin Lake N150 Processor  
+Memory: 16 GB  
+Storage: 1 TB  
+Network: WiFi 6, LAN 1000M  
+Input: 100-240V, 1.9A 50/60Hz  
 
 ### Raspberry Pi 4 B
 
-Hostname: `home-assistant`
-IP: `10.0.0.195`
-OS: Home Assistant ISO
-Role: Home Assistant
-RAM: 4 GB
-ARCH: ARMv8 64 bit
+Hostname: `home-assistant`  
+IP: `10.0.0.195`  
+OS: Home Assistant ISO  
+Role: Home Assistant  
+RAM: 4 GB  
+ARCH: ARMv8 64 bit  
 
 ### Raspberry Pi 4 B
 
-IP: `10.0.0.70`
-OS: Debian
-Role: SDR Receiver
-RAM: 1 GB
-ARCH: ARMv8 64 bit
+IP: `10.0.0.70`  
+OS: [OpenWebRX+ 1.2.102](https://github.com/luarvique/openwebrx/releases)
+Role: Software Defined Radio Client  
+RAM: 1 GB  
+ARCH: ARMv8 64 bit  
 
 ### Raspberry Pi 3 B v2
 
-IP: `10.0.0.232`
-OS: Raspbian
-Role: Linux play environment
-RAM: 1 GB
-ARCH: ARMv8 64 bit
+IP: `10.0.0.232`  
+OS: Raspbian  
+Role: Linux play environment  
+RAM: 1 GB  
+ARCH: ARMv8 64 bit  
 
 ## Network
 
