@@ -9,16 +9,29 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "spark",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Quick-deploy dev environments for one-off projects",
+	Long: `Spark creates ephemeral development environments in your homelab cluster.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+Each spark gets:
+  - Random adjective-noun name (e.g., brave-dolphin)
+  - Debian container with SSH, Claude Code, and your dotfiles
+  - Tailscale connectivity for external access
+  - Dedicated PostgreSQL database
+  - Pre-configured environment variables (DATABASE_URL, ANTHROPIC_API_KEY)
+  - Optional git repository cloning
+
+Commands:
+  create - Create a new spark
+  list   - List all active sparks
+  shell  - SSH into an existing spark
+  delete - Destroy a spark and its database
+
+Examples:
+  spark create                     # Create a new spark
+  spark create --repo https://...  # Create with git repo
+  spark list                       # List all sparks
+  spark shell brave-dolphin        # SSH into a spark
+  spark delete brave-dolphin       # Delete a spark`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -31,13 +44,5 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spark.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Global flags can be added here if needed
 }
