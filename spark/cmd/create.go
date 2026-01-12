@@ -40,9 +40,6 @@ var createCmd = &cobra.Command{
 
 		// Create PostgreSQL database
 		fmt.Println("Creating PostgreSQL database...")
-		fmt.Printf("  Host: %s:%s\n", cfg.PostgresHost, cfg.PostgresPort)
-		fmt.Printf("  User: %s\n", cfg.PostgresUser)
-		fmt.Printf("  DB: %s\n", cfg.PostgresDB)
 		dbConnString := db.BuildConnectionString(
 			cfg.PostgresHost,
 			cfg.PostgresPort,

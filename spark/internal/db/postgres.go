@@ -23,12 +23,6 @@ func NewClient(connectionString string, password string) (*Client, error) {
 		extractDatabase(connectionString),
 	)
 
-	fmt.Printf("DEBUG: DSN parts - host:%s port:%s user:%s db:%s\n",
-		extractHost(connectionString),
-		extractPort(connectionString),
-		extractUser(connectionString),
-		extractDatabase(connectionString))
-
 	conn, err := sql.Open("postgres", connWithPassword)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to postgres: %w", err)
@@ -40,11 +34,6 @@ func NewClient(connectionString string, password string) (*Client, error) {
 	}
 
 	return &Client{conn: conn}, nil
-}
-
-func hidePassword(uri string) string {
-	// Hide password in debug output
-	return "postgresql://spark:****@..."
 }
 
 func extractHost(dsn string) string {
@@ -138,7 +127,7 @@ func (c *Client) DeleteDatabase(name string) error {
 	_, err := c.conn.Exec(fmt.Sprintf(`
 		SELECT pg_terminate_backend(pg_stat_activity.pid)
 		FROM pg_stat_activity
-		WHERE pg_stat_activity.datname = %q
+		WHERE pg_stat_activity.datname = '%s'
 		AND pid <> pg_backend_pid()`, name))
 	if err != nil {
 		return fmt.Errorf("failed to terminate connections: %w", err)

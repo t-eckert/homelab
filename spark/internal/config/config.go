@@ -23,7 +23,7 @@ func Load() (*Config, error) {
 		GitHubToken:      os.Getenv("GITHUB_TOKEN"),
 		PostgresHost:     getEnvOrDefault("POSTGRES_HOST", "postgres.postgres.svc.cluster.local"),
 		PostgresPort:     getEnvOrDefault("POSTGRES_PORT", "5432"),
-		PostgresUser:     getEnvOrDefault("POSTGRES_USER", "postgres"),
+		PostgresUser:     getEnvOrDefault("POSTGRES_USER", "spark"),
 		PostgresPassword: os.Getenv("POSTGRES_PASSWORD"),
 		PostgresDB:       getEnvOrDefault("POSTGRES_DB", "homelab"),
 	}

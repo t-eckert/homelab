@@ -8,12 +8,12 @@ import (
 )
 
 type SparkResources struct {
-	Name             string
-	GitRepo          string
-	DatabaseURL      string
-	AnthropicAPIKey  string
-	SSHPublicKey     string
-	GitHubToken      string
+	Name            string
+	GitRepo         string
+	DatabaseURL     string
+	AnthropicAPIKey string
+	SSHPublicKey    string
+	GitHubToken     string
 }
 
 const SparkNamespace = "spark"
@@ -213,7 +213,7 @@ func (s *SparkResources) CreateDeployment() *appsv1.Deployment {
 								},
 							},
 							SecurityContext: &corev1.SecurityContext{
-								RunAsUser:              &runAsUser,
+								RunAsUser:                &runAsUser,
 								AllowPrivilegeEscalation: boolPtr(true),
 								Capabilities: &corev1.Capabilities{
 									Add: []corev1.Capability{
@@ -263,6 +263,7 @@ func (s *SparkResources) buildInitScript() string {
 	script := `#!/bin/bash
 set -e
 
+echo "==> Installing dependencies..."
 # Install dependencies
 apt-get update && apt-get install -y \
     openssh-server \
@@ -273,13 +274,22 @@ apt-get update && apt-get install -y \
     vim \
     tmux \
     build-essential \
-    ca-certificates
+    ca-certificates \
+    postgresql-client
 
-# Create user with sudo access
-useradd -u 1000 -d /home/user -s /bin/bash user || true
+echo "==> Creating user..."
+# Create user with sudo access (only if doesn't exist)
+if ! id -u user >/dev/null 2>&1; then
+    useradd -u 1000 -m -d /home/user -s /bin/bash user
+    echo "User created successfully"
+else
+    echo "User already exists"
+fi
+
 echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user
 chmod 440 /etc/sudoers.d/user
 
+echo "==> Setting up SSH..."
 # Create user home directory structure
 mkdir -p /home/user/.ssh /home/user/.local/bin /home/user/.config
 
@@ -299,13 +309,17 @@ if [ -f /tmp/spark-secret/GITHUB_TOKEN ]; then
     chmod 600 /home/user/.config/gh/hosts.yml
 fi
 
-# Install Claude Code CLI as user
-su - user -c "curl -fsSL https://raw.githubusercontent.com/anthropics/claude-code/main/install.sh | sh"
+echo "==> Installing Claude Code..."
+# Install Claude Code CLI as user (using official install script)
+su - user -c "curl -fsSL https://claude.ai/install.sh | bash" || echo "Claude Code installation failed, continuing..."
 
+echo "==> Cloning dotfiles..."
 # Clone dotfiles if not already present
 if [ ! -d /home/user/.dotfiles ]; then
-    su - user -c "git clone https://github.com/t-eckert/dotfiles.git /home/user/.dotfiles"
-    su - user -c "cd /home/user/.dotfiles && ./install.sh" || true
+    su - user -c "git clone https://github.com/t-eckert/dotfiles.git /home/user/.dotfiles" || echo "Dotfiles clone failed, continuing..."
+    su - user -c "cd /home/user/.dotfiles && ./install.sh" || echo "Dotfiles install failed, continuing..."
+else
+    echo "Dotfiles already present"
 fi
 `
 
@@ -320,9 +334,13 @@ fi
 	}
 
 	script += `
+echo "==> Setting ownership and permissions..."
 # Set ownership
 chown -R 1000:1000 /home/user
+# Fix home directory permissions (SSH requires 755 or stricter)
+chmod 755 /home/user
 
+echo "==> Configuring SSH daemon..."
 # Configure SSH
 mkdir -p /run/sshd
 ssh-keygen -A
@@ -333,10 +351,28 @@ PermitRootLogin no
 PasswordAuthentication no
 PubkeyAuthentication yes
 AllowUsers user
+# Accept environment variables from client
+AcceptEnv LANG LC_* DATABASE_URL ANTHROPIC_API_KEY SPARK_NAME
+# Pass environment variables to PAM session
+PermitUserEnvironment yes
 EOF
 
-# Start SSH daemon
-/usr/sbin/sshd -D
+# Create environment file for SSH sessions
+cat > /home/user/.ssh/environment <<EOF
+DATABASE_URL=$DATABASE_URL
+ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY
+SPARK_NAME=$SPARK_NAME
+EOF
+chmod 600 /home/user/.ssh/environment
+chown user:user /home/user/.ssh/environment
+
+echo "==> Verifying user exists before starting SSH..."
+id user || (echo "ERROR: user does not exist!" && exit 1)
+
+echo "==> Starting SSH daemon..."
+echo "Spark is ready! Connect with: ssh user@spark-` + s.Name + `"
+# Start SSH daemon in foreground
+exec /usr/sbin/sshd -D -e
 `
 
 	return script

@@ -23,9 +23,10 @@ Each spark automatically gets:
 - Kubernetes cluster with kubectl configured
 - PostgreSQL instance accessible from the cluster
 - Tailscale operator installed in the cluster
+- Dedicated PostgreSQL user `spark` with CREATEDB privilege (see DATABASE_SETUP.md)
 - Environment variables:
   - `ANTHROPIC_API_KEY` - Your Anthropic API key
-  - `POSTGRES_PASSWORD` - PostgreSQL admin password
+  - `POSTGRES_PASSWORD` - Password for the `spark` PostgreSQL user
   - SSH public key at `~/.ssh/id_ed25519.pub` (or set `SSH_PUBLIC_KEY_PATH`)
   - `GITHUB_TOKEN` (optional) - For private repository access
 
@@ -94,11 +95,11 @@ Spark uses environment variables for configuration:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `ANTHROPIC_API_KEY` | *required* | Anthropic API key for Claude Code |
-| `POSTGRES_PASSWORD` | *required* | PostgreSQL admin password |
+| `POSTGRES_PASSWORD` | *required* | Password for the `spark` PostgreSQL user |
 | `POSTGRES_HOST` | `postgres.postgres.svc.cluster.local` | PostgreSQL hostname |
 | `POSTGRES_PORT` | `5432` | PostgreSQL port |
 | `POSTGRES_USER` | `spark` | PostgreSQL username |
-| `POSTGRES_DB` | `postgres` | PostgreSQL admin database |
+| `POSTGRES_DB` | `homelab` | PostgreSQL database to connect to |
 | `SSH_PUBLIC_KEY_PATH` | `~/.ssh/id_ed25519.pub` | Path to SSH public key |
 | `GITHUB_TOKEN` | - | GitHub token for private repos (optional) |
 
