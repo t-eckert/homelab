@@ -7,8 +7,8 @@ spec:
   imageRepositoryRef:
     name: field-theories
   filterTags:
-    pattern: '^(20[0-9]{2})([0-9]{2})([0-9]{2})-[0-9]{4}-sha-[a-f0-9]+$'
-    extract: '$1.$2.$3'
+    pattern: '^(?P<ts>[0-9]{8})-[0-9]{4}-sha-[a-f0-9]{7}$'
+    extract: '$ts'
   policy:
     semver:
-      range: '>=2025.0.0'
+      range: '*'  # Accept all matching tags
