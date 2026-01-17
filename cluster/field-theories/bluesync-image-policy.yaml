@@ -1,0 +1,14 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: bluesync
+  namespace: field-theories
+spec:
+  imageRepositoryRef:
+    name: bluesync
+  filterTags:
+    pattern: '^(?P<ts>[0-9]{8})-[0-9]{4}-sha-[a-f0-9]{7}$'
+    extract: '$ts'
+  policy:
+    semver:
+      range: '*'  # Accept all matching tags

@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bluesync
+  namespace: field-theories
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bluesync
+  template:
+    metadata:
+      labels:
+        app: bluesync
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: bluesync
+        image: ghcr.io/t-eckert/field-theories/bluesync:latest # {"$imagepolicy": "field-theories:bluesync"}
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        env:
+        - name: BLUESKY_IDENTIFIER
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: BLUESKY_IDENTIFIER
+        - name: BLUESKY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: BLUESKY_PASSWORD
+        - name: BLUESKY_MOCK
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: BLUESKY_MOCK
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: DB_PASSWORD
+        - name: RSS_FEED_URL
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: RSS_FEED_URL
+        - name: API_PORT
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: API_PORT
+        - name: CORS_ORIGIN
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: CORS_ORIGIN
+        - name: RSS_SYNC_CRON
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: RSS_SYNC_CRON
+        - name: COMMENT_SYNC_CRON
+          valueFrom:
+            secretKeyRef:
+              name: bluesync-secret
+              key: COMMENT_SYNC_CRON
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3

@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bluesync-db-init
+  namespace: field-theories
+spec:
+  ttlSecondsAfterFinished: 300  # Clean up 5 minutes after completion
+  template:
+    metadata:
+      labels:
+        app: bluesync-db-init
+    spec:
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999  # postgres user
+        runAsGroup: 999
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: db-init
+        image: postgres:17-alpine
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        env:
+        - name: PGHOST
+          value: "postgres.postgres.svc.cluster.local"
+        - name: PGPORT
+          value: "5432"
+        - name: PGUSER
+          value: "postgres"
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              namespace: postgres
+              key: POSTGRES_PASSWORD
+        - name: PGDATABASE
+          value: "postgres"  # Connect to default database first
+        command:
+        - /bin/sh
+        - -c
+        - |
+          # Create bluesync database if it doesn't exist
+          psql -tc "SELECT 1 FROM pg_database WHERE datname = 'bluesync'" | grep -q 1 || \
+          psql -c "CREATE DATABASE bluesync OWNER postgres;"
+
+          echo "Database 'bluesync' is ready"
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}

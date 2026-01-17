@@ -1,0 +1,11 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: bluesync
+  namespace: field-theories
+spec:
+  image: ghcr.io/t-eckert/field-theories/bluesync
+  interval: 5m
+  exclusionList:
+  - ^.*\.sig$
+  - ^sha-[a-f0-9]+$  # Exclude SHA-only tags to focus on timestamped tags

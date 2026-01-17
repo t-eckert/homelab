@@ -19,9 +19,19 @@ tasks:
 
   db:access:
     desc: Open a psql instance against the Homelab Postgres database.
+    vars:
+      DB: '{{.DB | default "homelab"}}'
     cmds:
       - export PGPASSWORD=$(op read "op://Homelab/Homelab Postgres/password")
-      - psql -h postgres-homelab -p 5432 -U postgres -d homelab
+      - psql -h postgres-homelab -p 5432 -U postgres -d {{.DB}}
+    silent: true
+
+  db:conn:
+    desc: Return a Postgres connection string for the given database (default homelab).
+    vars:
+      DB: '{{.DB | default "homelab"}}'
+    cmds:
+      - echo "postgresql://postgres:$(op read "op://Homelab/Homelab Postgres/password")@postgres-homelab:5432/{{.DB}}"
     silent: true
 
   workbench:ssh:
