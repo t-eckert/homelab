@@ -10,5 +10,5 @@ spec:
     pattern: '^(?P<ts>[0-9]{8})-[0-9]{4}-sha-[a-f0-9]{7}$'
     extract: '$ts'
   policy:
-    semver:
-      range: '*'  # Accept all matching tags
+    numerical:
+      order: asc  # Select highest timestamp
