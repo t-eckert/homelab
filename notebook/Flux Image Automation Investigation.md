@@ -190,7 +190,7 @@ This extracts just the timestamp portion and sorts numerically.
 
 ### Solution 1: Switch to Numerical Ordering with Extract (Recommended)
 
-Update `cluster/field-theories/image-policy.yaml`:
+Update `cluster/apps/field-theories/fieldtheories-image-policy.yaml`:
 
 ```yaml
 apiVersion: image.toolkit.fluxcd.io/v1beta2
@@ -226,7 +226,7 @@ kubectl get imagerepository field-theories -n field-theories -o yaml > /tmp/imag
 kubectl delete imagerepository field-theories -n field-theories
 
 # Recreate
-kubectl apply -f cluster/field-theories/image-repository.yaml
+kubectl apply -f cluster/apps/field-theories/fieldtheories-image-repository.yaml
 
 # Wait for scan
 kubectl wait --for=condition=Ready imagerepository/field-theories -n field-theories --timeout=2m
@@ -237,7 +237,7 @@ kubectl get imagepolicy field-theories -n field-theories -o jsonpath='{.status.l
 
 ### Solution 3: Add Exclusion for SHA-Only Tags
 
-Update `cluster/field-theories/image-repository.yaml`:
+Update `cluster/apps/field-theories/fieldtheories-image-repository.yaml`:
 
 ```yaml
 spec:

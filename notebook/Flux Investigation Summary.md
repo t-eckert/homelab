@@ -170,14 +170,14 @@ kubectl set image deployment/field-theories \
 
 ## Files Modified
 
-1. `cluster/field-theories/image-repository.yaml`
+1. `cluster/apps/field-theories/fieldtheories-image-repository.yaml`
    - Added: `^sha-[a-f0-9]+$` to exclusionList
 
-2. `cluster/field-theories/image-policy.yaml`
+2. `cluster/apps/field-theories/fieldtheories-image-policy.yaml`
    - Kept: Alphabetical ordering (descending)
    - Removed: Numerical policy attempts (didn't work with hyphenated timestamps)
 
-3. `cluster/field-theories/deployment.yaml`
+3. `cluster/apps/field-theories/fieldtheories-deployment.yaml`
    - Manually updated: `20251202-1650-sha-f9b7c89` → `20251203-0536-sha-1972e38`
 
 ---

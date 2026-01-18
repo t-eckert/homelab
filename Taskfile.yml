@@ -73,8 +73,8 @@ tasks:
     desc: Scale down Minecraft server (saves 1Gi+ memory).
     cmds:
       - echo "Scaling down Minecraft server..."
-      - "sed -i.bak 's/replicas: 1/replicas: 0/' cluster/minecraft/deployment.yaml"
-      - rm cluster/minecraft/deployment.yaml.bak
+      - "sed -i.bak 's/replicas: 1/replicas: 0/' cluster/apps/minecraft/deployment.yaml"
+      - rm cluster/apps/minecraft/deployment.yaml.bak
       - echo "Updated deployment.yaml - replicas set to 0"
     silent: true
 
@@ -82,8 +82,8 @@ tasks:
     desc: Scale up Minecraft server.
     cmds:
       - echo "Scaling up Minecraft server..."
-      - "sed -i.bak 's/replicas: 0/replicas: 1/' cluster/minecraft/deployment.yaml"
-      - rm cluster/minecraft/deployment.yaml.bak
+      - "sed -i.bak 's/replicas: 0/replicas: 1/' cluster/apps/minecraft/deployment.yaml"
+      - rm cluster/apps/minecraft/deployment.yaml.bak
       - echo "Updated deployment.yaml - replicas set to 1"
     silent: true
 

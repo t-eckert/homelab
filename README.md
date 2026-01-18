@@ -70,7 +70,10 @@ Legend: StatefulSets use persistent storage • Tailscale provides secure ingres
 
 ### Cluster
 
-This is a [Talos Linux](https://www.talos.dev/) cluster where I run most of my applications. The configuration for this cluster is in the `cluster/` directory.
+This is a [Talos Linux](https://www.talos.dev/) cluster where I run most of my applications. The configuration for this cluster is in the `cluster/` directory, organized into:
+- `cluster/apps/` - User-facing applications
+- `cluster/system/` - Core infrastructure components
+- `cluster/infrastructure/` - Shared backing services
 
 - **Artemis**: An agentic app I wrote for finding job postings that match my résumé.
 - [Copy Party](https://github.com/9001/copyparty): A neato file server.

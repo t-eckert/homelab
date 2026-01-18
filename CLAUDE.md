@@ -13,14 +13,14 @@ The cluster uses Tailscale for external access and local-path-provisioner for st
 
 ## Repository Structure
 
-- `cluster/` - Kubernetes manifests organized by service
-  - `apps/` - Application namespace definitions
-  - `system/` - Core cluster components (storage, networking, device plugins)
-  - `[service]/` - Service-specific deployments (minecraft, ntfy, uptime-kuma)
+- `cluster/` - Kubernetes manifests organized by category
+  - `apps/` - User-facing applications (artemis, atuin, field-theories, jellyfin, minecraft, ntfy, etc.)
+  - `system/` - Core infrastructure (flux-system, monitoring, tailscale components)
+  - `infrastructure/` - Shared backing services (postgres)
 - `notebook/` - Technical documentation and setup guides
   - Documentation files use Title Case naming (e.g., `Home Assistant.md`, `Transfer Domain to Cloudflare.md`)
   - `notebook/plans/` - Write detailed implementation plans and procedures here using Title Case naming
-- Service directories - Additional configuration files
+- `scripts/` - Automation scripts for cluster management
 
 ## Common Commands
 
@@ -30,7 +30,9 @@ The cluster uses Tailscale for external access and local-path-provisioner for st
 task cluster:apply-namespaces
 
 # Apply specific service
-kubectl apply -f cluster/[service]/
+kubectl apply -f cluster/apps/[service]/
+kubectl apply -f cluster/system/[component]/
+kubectl apply -f cluster/infrastructure/[service]/
 
 # Check service status
 kubectl get svc -A | grep LoadBalancer
