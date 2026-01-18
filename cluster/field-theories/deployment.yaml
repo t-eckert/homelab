@@ -16,6 +16,8 @@ spec:
         tailscale.com/expose: "true"
         tailscale.com/funnel: "true"
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
