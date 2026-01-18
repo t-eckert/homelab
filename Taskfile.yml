@@ -86,3 +86,31 @@ tasks:
       - rm cluster/minecraft/deployment.yaml.bak
       - echo "Updated deployment.yaml - replicas set to 1"
     silent: true
+
+  images:check:
+    desc: Check for available container image updates (dry-run).
+    cmds:
+      - DRY_RUN=true ./scripts/update-images.sh
+    silent: false
+
+  images:update:
+    desc: Update container images and commit changes locally.
+    cmds:
+      - ./scripts/update-images.sh
+    silent: false
+
+  images:update-and-push:
+    desc: Update container images, commit, and push to remote.
+    cmds:
+      - AUTO_PUSH=true ./scripts/update-images.sh
+    silent: false
+
+  images:status:
+    desc: Show status of all ImagePolicy resources.
+    cmds:
+      - kubectl get imagepolicy -A
+      - echo ""
+      - echo "=== Latest Image Tags ==="
+      - |
+        kubectl get imagepolicy -A -o json | jq -r '.items[] | "\(.metadata.namespace)/\(.metadata.name): \(.status.latestRef.tag // "no-tag")"'
+    silent: false
