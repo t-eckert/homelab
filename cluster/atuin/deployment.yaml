@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atuin
+  namespace: atuin
+  labels:
+    app: atuin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atuin
+  template:
+    metadata:
+      labels:
+        app: atuin
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: atuin
+        image: ghcr.io/atuinsh/atuin:latest
+        imagePullPolicy: Always
+        command: ["atuin"]
+        args: ["server", "start"]
+        ports:
+        - containerPort: 8888
+          name: http
+          protocol: TCP
+        env:
+        - name: ATUIN_DB_URI
+          valueFrom:
+            secretKeyRef:
+              name: atuin-config
+              key: ATUIN_DB_URI
+        - name: ATUIN_HOST
+          valueFrom:
+            secretKeyRef:
+              name: atuin-config
+              key: ATUIN_HOST
+        - name: ATUIN_PORT
+          valueFrom:
+            secretKeyRef:
+              name: atuin-config
+              key: ATUIN_PORT
+        - name: ATUIN_OPEN_REGISTRATION
+          valueFrom:
+            secretKeyRef:
+              name: atuin-config
+              key: ATUIN_OPEN_REGISTRATION
+        - name: ATUIN_MAX_HISTORY_LENGTH
+          valueFrom:
+            secretKeyRef:
+              name: atuin-config
+              key: ATUIN_MAX_HISTORY_LENGTH
+        - name: ATUIN_PAGE_SIZE
+          valueFrom:
+            secretKeyRef:
+              name: atuin-config
+              key: ATUIN_PAGE_SIZE
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
