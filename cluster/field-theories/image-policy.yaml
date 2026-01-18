@@ -7,8 +7,8 @@ spec:
   imageRepositoryRef:
     name: field-theories
   filterTags:
-    pattern: '^(?P<ts>[0-9]{8})-[0-9]{4}-sha-[a-f0-9]{7}$'
-    extract: '$ts'
+    pattern: '^(?P<date>[0-9]{8})-(?P<time>[0-9]{4})-sha-[a-f0-9]{7}$'
+    extract: '$date$time'
   policy:
     numerical:
-      order: asc  # Select highest timestamp
+      order: asc  # Select highest timestamp (YYYYMMDDHHMM)
