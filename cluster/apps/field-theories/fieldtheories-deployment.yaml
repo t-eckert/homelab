@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: field-theories
-        image: ghcr.io/t-eckert/field-theories/site:20260118-2031-sha-33c1a81 # {"$imagepolicy": "field-theories:field-theories"}
+        image: ghcr.io/t-eckert/field-theories/site:20260118-2041-sha-6c00b6d # {"$imagepolicy": "field-theories:field-theories"}
         ports:
         - containerPort: 4321
         securityContext:
