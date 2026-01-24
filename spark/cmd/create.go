@@ -56,7 +56,7 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create database: %w", err)
 		}
-		fmt.Printf("✓ Database created: %s\n", sparkName)
+		fmt.Printf("Database created: %s\n", sparkName)
 
 		// Build database URL for the spark (URI format with password for container use)
 		sparkDBURL := db.BuildConnectionURI(
@@ -75,12 +75,12 @@ var createCmd = &cobra.Command{
 		}
 
 		resources := &k8s.SparkResources{
-			Name:             sparkName,
-			GitRepo:          gitRepo,
-			DatabaseURL:      sparkDBURL,
-			AnthropicAPIKey:  cfg.AnthropicAPIKey,
-			SSHPublicKey:     cfg.SSHPublicKey,
-			GitHubToken:      cfg.GitHubToken,
+			Name:            sparkName,
+			GitRepo:         gitRepo,
+			DatabaseURL:     sparkDBURL,
+			AnthropicAPIKey: cfg.AnthropicAPIKey,
+			SSHPublicKey:    cfg.SSHPublicKey,
+			GitHubToken:     cfg.GitHubToken,
 		}
 
 		err = k8sClient.CreateSpark(ctx, resources)
@@ -90,7 +90,7 @@ var createCmd = &cobra.Command{
 			return fmt.Errorf("failed to create spark: %w", err)
 		}
 
-		fmt.Printf("✓ Spark created successfully!\n")
+		fmt.Printf("Spark created successfully!\n")
 		fmt.Printf("\nWaiting for pod to be ready...\n")
 
 		// Wait for pod to be ready

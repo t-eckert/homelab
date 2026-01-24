@@ -38,7 +38,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to delete spark: %w", err)
 		}
-		fmt.Printf("✓ Kubernetes resources deleted\n")
+		fmt.Printf("Kubernetes resources deleted\n")
 
 		// Delete PostgreSQL database
 		fmt.Println("Deleting PostgreSQL database...")
@@ -58,9 +58,9 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to delete database: %w", err)
 		}
-		fmt.Printf("✓ Database deleted\n")
+		fmt.Printf("Database deleted\n")
 
-		fmt.Printf("\n✓ Spark %s deleted successfully!\n", sparkName)
+		fmt.Printf("\nSpark %s deleted successfully!\n", sparkName)
 		return nil
 	},
 }

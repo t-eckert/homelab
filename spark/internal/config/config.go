@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// Config holds the application configuration loaded from environment variables.
 type Config struct {
 	AnthropicAPIKey  string
 	GitHubToken      string
@@ -17,6 +18,7 @@ type Config struct {
 	PostgresDB       string
 }
 
+// Load reads configuration from environment variables and returns a Config struct.
 func Load() (*Config, error) {
 	cfg := &Config{
 		AnthropicAPIKey:  os.Getenv("ANTHROPIC_API_KEY"),
