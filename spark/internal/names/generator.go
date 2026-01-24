@@ -21,6 +21,7 @@ var nouns = []string{
 	"badger", "coyote", "ferret", "lynx", "orca",
 }
 
+// Generate creates a random adjective-noun name.
 func Generate() string {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	adjective := adjectives[rng.Intn(len(adjectives))]
