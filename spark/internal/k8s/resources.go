@@ -7,6 +7,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// SparkResources holds the configuration for creating Kubernetes resources for a spark.
 type SparkResources struct {
 	Name            string
 	GitRepo         string
@@ -16,8 +17,10 @@ type SparkResources struct {
 	GitHubToken     string
 }
 
+// SparkNamespace is the Kubernetes namespace where sparks are deployed.
 const SparkNamespace = "spark"
 
+// CreateConfigMap creates a ConfigMap for the spark.
 func (s *SparkResources) CreateConfigMap() *corev1.ConfigMap {
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
@@ -35,6 +38,7 @@ func (s *SparkResources) CreateConfigMap() *corev1.ConfigMap {
 	}
 }
 
+// CreateSecret creates a Secret for the spark.
 func (s *SparkResources) CreateSecret() *corev1.Secret {
 	return &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -53,6 +57,7 @@ func (s *SparkResources) CreateSecret() *corev1.Secret {
 	}
 }
 
+// CreatePVC creates a PersistentVolumeClaim for the spark.
 func (s *SparkResources) CreatePVC() *corev1.PersistentVolumeClaim {
 	return &corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
@@ -76,6 +81,7 @@ func (s *SparkResources) CreatePVC() *corev1.PersistentVolumeClaim {
 	}
 }
 
+// CreateService creates a Service for the spark.
 func (s *SparkResources) CreateService() *corev1.Service {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
@@ -107,6 +113,7 @@ func (s *SparkResources) CreateService() *corev1.Service {
 	}
 }
 
+// CreateDeployment creates a Deployment for the spark.
 func (s *SparkResources) CreateDeployment() *appsv1.Deployment {
 	replicas := int32(1)
 	runAsUser := int64(0)
