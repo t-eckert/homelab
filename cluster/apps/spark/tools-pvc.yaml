@@ -1,0 +1,17 @@
+# Shared PVC for dotfiles tools volume
+# Used by all Spark pods to access development tools and configurations
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: spark-tools-pvc
+  namespace: spark
+  labels:
+    app: spark
+    component: tools
+spec:
+  accessModes:
+    - ReadOnlyMany  # Multiple sparks can read simultaneously
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi

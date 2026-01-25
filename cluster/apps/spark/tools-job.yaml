@@ -1,0 +1,44 @@
+# Job to populate the spark-tools-pvc with dotfiles tools and configs
+# Run once to initialize, or re-run to update tools to the latest container image
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-tools-populator
+  namespace: spark
+  labels:
+    app: spark
+    component: tools
+spec:
+  # Clean up job pod 5 minutes after completion
+  ttlSecondsAfterFinished: 300
+  # Don't restart on failure, but allow 3 retries
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: spark-tools
+        component: populator
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: installer
+          # Image automatically updated by Flux or manual redeploy
+          image: ghcr.io/t-eckert/dotfiles:latest
+          imagePullPolicy: Always
+          # Mount PVC to populate
+          args: ["/mnt/tools"]
+          volumeMounts:
+            - name: tools-volume
+              mountPath: /mnt/tools
+          # Resource constraints to avoid overwhelming the node
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      volumes:
+        - name: tools-volume
+          persistentVolumeClaim:
+            claimName: spark-tools-pvc

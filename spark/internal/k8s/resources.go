@@ -208,6 +208,11 @@ func (s *SparkResources) CreateDeployment() *appsv1.Deployment {
 									MountPath: "/tmp/spark-secret",
 									ReadOnly:  true,
 								},
+								{
+									Name:      "spark-tools",
+									MountPath: "/home/user/.local",
+									ReadOnly:  true,
+								},
 							},
 							Resources: corev1.ResourceRequirements{
 								Requests: corev1.ResourceList{
@@ -259,6 +264,15 @@ func (s *SparkResources) CreateDeployment() *appsv1.Deployment {
 								},
 							},
 						},
+						{
+							Name: "spark-tools",
+							VolumeSource: corev1.VolumeSource{
+								PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+									ClaimName: "spark-tools-pvc",
+									ReadOnly:  true,
+								},
+							},
+						},
 					},
 				},
 			},
@@ -295,6 +309,15 @@ fi
 
 echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user
 chmod 440 /etc/sudoers.d/user
+
+echo "==> Setting up dotfiles tools..."
+# Activate dotfiles tools if available (mounted at /home/user/.local)
+if [ -f /home/user/.local/activate.sh ]; then
+    chmod +x /home/user/.local/activate.sh
+    echo "Dotfiles tools volume found and will be available in PATH"
+else
+    echo "Dotfiles tools volume not yet mounted (will be available after initialization)"
+fi
 
 echo "==> Setting up SSH..."
 # Create user home directory structure
@@ -372,6 +395,14 @@ SPARK_NAME=$SPARK_NAME
 EOF
 chmod 600 /home/user/.ssh/environment
 chown user:user /home/user/.ssh/environment
+
+# Add dotfiles tools activation to user's bashrc
+if [ -f /home/user/.local/activate.sh ]; then
+    echo "" >> /home/user/.bashrc
+    echo "# Activate dotfiles tools" >> /home/user/.bashrc
+    echo "source /home/user/.local/activate.sh 2>/dev/null || true" >> /home/user/.bashrc
+    chown user:user /home/user/.bashrc
+fi
 
 echo "==> Verifying user exists before starting SSH..."
 id user || (echo "ERROR: user does not exist!" && exit 1)

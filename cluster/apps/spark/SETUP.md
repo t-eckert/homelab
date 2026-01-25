@@ -41,7 +41,37 @@ kubectl get secret spark-cli-config -n spark
 kubectl describe secret spark-cli-config -n spark
 ```
 
-## 4. Build and Install the Spark CLI
+## 4. Create the Tools PVC
+
+The shared tools PVC provides development tools and configurations to all sparks. Create it with:
+
+```bash
+kubectl apply -f cluster/spark/tools-pvc.yaml
+```
+
+Then populate it with the latest tools:
+
+```bash
+kubectl apply -f cluster/spark/tools-job.yaml
+```
+
+Wait for the job to complete:
+
+```bash
+kubectl get job -n spark
+kubectl logs -n spark -l app=spark-tools -f
+```
+
+This will populate the PVC with tools like `kubectl`, `nvim`, `gh`, `node`, `python`, and more.
+
+To refresh tools to the latest container image in the future, re-run:
+
+```bash
+kubectl delete job spark-tools-populator -n spark
+kubectl apply -f cluster/spark/tools-job.yaml
+```
+
+## 5. Build and Install the Spark CLI
 
 ```bash
 cd spark/
@@ -49,7 +79,7 @@ go build -o spark
 sudo mv spark /usr/local/bin/
 ```
 
-## 5. Configure Environment Variables
+## 6. Configure Environment Variables
 
 Option A - Load from Kubernetes secret (recommended):
 
@@ -65,7 +95,7 @@ export POSTGRES_PASSWORD="wie22A7.!bHqb2cqQxARQ_v!Eq"
 export GITHUB_TOKEN="ghp_..."  # Optional
 ```
 
-## 6. Create Your First Spark
+## 7. Create Your First Spark
 
 ```bash
 spark create
@@ -78,7 +108,7 @@ This will:
 4. Wait for the pod to be ready
 5. Automatically SSH into the container
 
-## 7. Verify Everything Works
+## 8. Verify Everything Works
 
 Inside the spark container, check that everything is configured:
 
@@ -96,6 +126,11 @@ claude --version
 
 # Check dotfiles were installed
 ls -la ~/.dotfiles
+
+# Verify tools are available
+which kubectl nvim gh node python
+ls ~/.local/bin/ | head -20
+cat ~/.local/manifest.txt
 ```
 
 ## Troubleshooting

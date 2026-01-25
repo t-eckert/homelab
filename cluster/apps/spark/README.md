@@ -32,10 +32,29 @@ kubectl apply -f secret.yaml
 
 **Note**: `secret.yaml` is gitignored and will not be committed to the repository.
 
-### 4. Verify
+### 4. Create the Tools PVC and Populator Job
+
+Create the shared PVC for development tools and run the populator job:
+
+```bash
+kubectl apply -f tools-pvc.yaml
+kubectl apply -f tools-job.yaml
+```
+
+Wait for the job to complete:
+
+```bash
+kubectl get job -n spark --watch
+kubectl logs -n spark -l app=spark-tools -f
+```
+
+The tools PVC will be automatically mounted at `/home/user/.local` in all Spark pods.
+
+### 5. Verify
 
 ```bash
 kubectl get secret spark-cli-config -n spark
+kubectl get pvc -n spark
 ```
 
 ## Using the Spark CLI
@@ -69,15 +88,24 @@ export POSTGRES_PASSWORD=$(kubectl get secret spark-cli-config -n spark -o jsonp
 export GITHUB_TOKEN=$(kubectl get secret spark-cli-config -n spark -o jsonpath='{.data.GITHUB_TOKEN}' | base64 -d)
 ```
 
-## Resources Created by Sparks
+## Resources
+
+### Shared Resources (Created Once)
+
+- **PVC**: `spark-tools-pvc` (5GB read-only tools volume)
+- **Job**: `spark-tools-populator` (populates the tools PVC)
+
+### Per-Spark Resources
 
 Each spark creates these resources in the `spark` namespace:
 
 - **Deployment**: `{spark-name}` (e.g., `brave-dolphin`)
 - **Service**: `{spark-name}-ssh` (LoadBalancer with Tailscale)
-- **PVC**: `{spark-name}-storage` (10GB persistent storage)
+- **PVC**: `{spark-name}-storage` (10GB persistent storage at `/home/user`)
 - **ConfigMap**: `{spark-name}-config` (SSH keys, git repo URL)
 - **Secret**: `{spark-name}-secret` (DATABASE_URL, ANTHROPIC_API_KEY, GITHUB_TOKEN)
+
+All sparks automatically mount the `spark-tools-pvc` at `/home/user/.local` for access to development tools and configs.
 
 ## Cleanup
 
