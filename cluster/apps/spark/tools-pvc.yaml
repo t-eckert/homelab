@@ -10,7 +10,7 @@ metadata:
     component: tools
 spec:
   accessModes:
-    - ReadOnlyMany  # Multiple sparks can read simultaneously
+    - ReadWriteOnce  # Local-path provisioner limitation; sparks mount read-only
   storageClassName: local-path
   resources:
     requests:
