@@ -7,8 +7,20 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`grafana.feist-gondola.ts.net`)
+    - match: Host(`traefik.feist-gondola.ts.net`) && PathPrefix(`/grafana`)
       kind: Rule
+      middlewares:
+        - name: grafana-stripprefix
       services:
         - name: grafana
           port: 3000
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: grafana-stripprefix
+  namespace: monitoring
+spec:
+  stripPrefix:
+    prefixes:
+      - /grafana

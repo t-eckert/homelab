@@ -7,8 +7,20 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`prometheus.feist-gondola.ts.net`)
+    - match: Host(`traefik.feist-gondola.ts.net`) && PathPrefix(`/prometheus`)
       kind: Rule
+      middlewares:
+        - name: prometheus-stripprefix
       services:
         - name: prometheus
           port: 9090
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: prometheus-stripprefix
+  namespace: monitoring
+spec:
+  stripPrefix:
+    prefixes:
+      - /prometheus
