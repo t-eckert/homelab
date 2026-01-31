@@ -5,12 +5,10 @@ metadata:
   namespace: monitoring
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
     - match: Host(`grafana.feist-gondola.ts.net`)
       kind: Rule
       services:
         - name: grafana
           port: 3000
-  tls:
-    certResolver: tailscale
