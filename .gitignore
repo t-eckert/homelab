@@ -1,8 +1,9 @@
 talos/
-cluster/umami/umami-secret.yaml
-cluster/workbench/github-token-secret.yaml
-cluster/workbench/ssh-authorized-keys-configmap.yaml
+
+
 */**/*secret*.yaml
 */**/*credentials*.yaml
 */**/*key*.yaml
 */**/*config*.yaml
+
+cluster/workbench/ssh-authorized-keys-configmap.yaml
