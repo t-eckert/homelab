@@ -39,7 +39,8 @@ spec:
           enabled: true
       metrics:
         port: 9100
-        expose: true
+        expose:
+          default: true
 
     service:
       type: LoadBalancer
