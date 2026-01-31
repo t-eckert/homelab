@@ -1,8 +1,23 @@
 # Homelab
 
-This repo contains all of the scripts, definitions, and notes for my homelab.
+This repo contains all of the scripts, definitions, and notes for my homelab. If it can be configured as code and it's not a secret, it's in this repo. My goal is to have as much of my configuration in source control and available for future travelers who would like to use it.
 
-## Architecture
+## Hardware
+
+- Bee Link Mini PC running Talos Linux (Kubernetes): Hosts apps, websites, and a media server. This is configured in [`./cluster`](./cluster).
+- Raspberry Pis: I have 3 that run the following
+  - Home Assistant OS
+  - OpenWebRX+ radio receiver
+  - Raspbian Linux play environment
+
+[Read more...](./notebook/Hardware.md)
+
+## Networking
+
+Access to the apps and services across the homelab is managed by Tailscale. For the Raspberry Pis, I run Tailscale as a daemon. In the Kubernetes cluster, I run the Tailscale operator in concert with Traefik to enable TLS. The Traefik+Tailscale model with the reverse proxy also reduces the amount of compute needed to access all of the endpoints.
+
+For sites that I want to have publically accessible with a _pretty_ hostname, I use Cloudflare Tunnels.
+
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -25,7 +40,6 @@ This repo contains all of the scripts, definitions, and notes for my homelab.
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Personal Projects                                                          │
-│  ├─ Artemis                   - Job search application                      │
 │  ├─ Field Theories            - Personal blog (Astro)                       │
 │  │  └─ Cloudflared           - Cloudflare Tunnel                           │
 │  └─ Field Theories BS Sync    - BlueSky integration (Rust)                  │
