@@ -39,6 +39,7 @@ spec:
       annotations:
         tailscale.com/hostname: "traefik"
         tailscale.com/proxy-class: "tailscale-proxy"
+        tailscale.com/funnel: "true"
 
     metrics:
       prometheus:
