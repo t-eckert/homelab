@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: bluesync
-        image: ghcr.io/t-eckert/field-theories/bluesync:latest # {"$imagepolicy": "field-theories:bluesync"}
+        image: ghcr.io/t-eckert/field-theories/bluesync:20260117-0254-sha-290e790 # {"$imagepolicy": "field-theories:bluesync"}
         ports:
         - containerPort: 3000
           name: http
