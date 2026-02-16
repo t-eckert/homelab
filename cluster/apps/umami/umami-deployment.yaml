@@ -24,7 +24,10 @@ spec:
           protocol: TCP
         env:
         - name: DATABASE_URL
-          value: "postgresql://umami:Y%2BEGjxoMe5GK7mPMQVpj2s93IiEayOAg@postgres.postgres.svc.cluster.local:5432/umami"
+          valueFrom:
+            secretKeyRef:
+              name: umami-secret
+              key: DATABASE_URL
         - name: DATABASE_TYPE
           value: "postgresql"
         - name: APP_SECRET

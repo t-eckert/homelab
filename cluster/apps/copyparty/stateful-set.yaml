@@ -17,6 +17,13 @@ spec:
       - name: copyparty
         image: copyparty/dj:latest
         args: ["-c", "/cfg/copyparty.conf", "-v", "/data::r:rw,admin"]
+        resources:
+          requests:
+            cpu: 10m
+            memory: 192Mi
+          limits:
+            cpu: 50m
+            memory: 256Mi
         ports:
           - containerPort: 3923
         volumeMounts:

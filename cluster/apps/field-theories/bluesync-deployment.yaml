@@ -68,8 +68,8 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: bluesync-secret
-              key: DB_PASSWORD
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
         - name: RSS_FEED_URL
           valueFrom:
             secretKeyRef:

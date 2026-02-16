@@ -17,6 +17,13 @@ spec:
       - name: ntfy
         image: binwiederhier/ntfy
         args: ["serve", "--cache-file", "/var/cache/ntfy/cache.db"]
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
         ports:
         - containerPort: 80
           name: http

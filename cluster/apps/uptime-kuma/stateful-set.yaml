@@ -53,7 +53,12 @@ spec:
               port: http
               scheme: HTTP
           resources:
-            {}
+            requests:
+              cpu: 20m
+              memory: 192Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
   volumeClaimTemplates:
     - metadata:
         name: uptime-storage
