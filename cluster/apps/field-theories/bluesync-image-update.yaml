@@ -1,0 +1,22 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: bluesync
+  namespace: field-theories
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  git:
+    commit:
+      author:
+        email: flux@homelab
+        name: Flux
+      messageTemplate: 'Update bluesync image'
+    push:
+      branch: main
+  update:
+    strategy: Setters
+    path: cluster/apps/field-theories

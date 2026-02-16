@@ -38,7 +38,6 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-secret
-              namespace: postgres
               key: POSTGRES_PASSWORD
         - name: PGDATABASE
           value: "postgres"  # Connect to default database first
