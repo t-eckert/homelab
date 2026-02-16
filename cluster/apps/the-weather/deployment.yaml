@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-weather
+  namespace: the-weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: the-weather
+  template:
+    metadata:
+      labels:
+        app: the-weather
+    spec:
+      containers:
+      - name: the-weather
+        image: ghcr.io/t-eckert/the-weather:latest
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        - name: OPEN_WEATHER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: the-weather-secret
+              key: OPEN_WEATHER_API_KEY
+        - name: HOME_LAT
+          value: "45.4215"
+        - name: HOME_LON
+          value: "-75.6972"
+        resources:
+          requests:
+            memory: "16Mi"
+            cpu: "10m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
