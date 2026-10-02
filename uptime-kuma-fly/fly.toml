@@ -4,7 +4,7 @@ kill_signal = 'SIGINT'
 kill_timeout = '5s'
 
 [build]
-  image = 'louislam/uptime-kuma:2.2.1'
+  image = 'louislam/uptime-kuma:2.5.5'
 
 [mounts]
   source = 'uptime_kuma_data'
