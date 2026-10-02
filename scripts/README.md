@@ -2,6 +2,91 @@
 
 Automation scripts for managing the homelab Kubernetes cluster.
 
+## Raspberry Pi Flashing
+
+### Overview
+
+`flash-pi.sh` writes a Raspberry Pi OS `.img.xz` to an SD card and configures headless first
+boot — hostname, user, SSH key, and Wi-Fi — by generating a `custom.toml` on the boot
+partition. That's Raspberry Pi OS's own first-boot provisioning format, the same one
+Raspberry Pi Imager writes, so this is the CLI equivalent of Imager's customisation dialog.
+
+**It erases the target card.** It refuses to write to anything that isn't removable, rejects
+devices larger than 2 TB, and requires typing `ERASE` to proceed.
+
+### Usage
+
+```bash
+# Download an image first (checksums are published alongside)
+curl -L -o rpios.img.xz https://downloads.raspberrypi.com/raspios_lite_arm64_latest
+curl -L    https://downloads.raspberrypi.com/raspios_lite_arm64_latest.sha256 | shasum -a 256 -c
+
+# Via Task
+task pi:flash IMAGE=rpios.img.xz
+
+# Direct
+PI_IMAGE=rpios.img.xz ./scripts/flash-pi.sh
+```
+
+It prompts for the username, account password, and Wi-Fi password (and the SSID, if `PI_SSID` is unset). Those are read
+interactively so they never reach shell history, the environment, or this repository. The
+account password is hashed with SHA-512 crypt before being written.
+
+### Configuration
+
+- `PI_IMAGE` — path to a `.img.xz` image (required)
+- `PI_DISK` — target device. Auto-detected when exactly one removable disk is present.
+- `PI_HOSTNAME` — default `sdr`; the Pi is reachable at `<hostname>.local`
+- `PI_SSID` — Wi-Fi network to join; prompted for if unset
+- `PI_COUNTRY` — default `CA`
+- `PI_SSH_KEY` — default `~/.ssh/id_ed25519.pub`
+- `PI_TIMEZONE` — default `America/Toronto`
+
+**`PI_COUNTRY` is not optional in practice.** Without a wireless regulatory domain the Pi
+keeps `wlan0` rfkill-blocked on 5 GHz, so a 5 GHz network is invisible to it and the board
+boots with no network and no indication why.
+
+## Raspberry Pi Identity
+
+### Overview
+
+`pi-identity.sh` captures a Pi's **immutable** identifiers — serial number, `eth0`/`wlan0` MAC
+addresses, and board revision — and prints them as a Markdown block ready to paste into
+[notebook/Hardware.md](../notebook/Hardware.md).
+
+Hardware.md used to record each machine by IP address. A router change invalidated all of them
+at once and left two visually identical Pi 4 Bs (1 GB and 4 GB) indistinguishable without
+booting them. Serials and MACs don't change, so record those and treat the IP as a
+*last seen* note.
+
+### Usage
+
+```bash
+# Via Task (recommended)
+task pi:identity HOST=sdr.local
+
+# Direct, over SSH
+PI_HOST=sdr.local ./scripts/pi-identity.sh
+
+# Direct, running on the Pi itself
+./scripts/pi-identity.sh
+```
+
+### How It Works
+
+Reads `/proc/device-tree/model`, `/proc/cpuinfo`, `/proc/meminfo`, and `/sys/class/net/*/address`,
+then cross-checks the reported RAM two independent ways: `MemTotal`, and the memory nibble of
+the Pi 4 B revision code (`a` = 1 GB, `b` = 2 GB, `c` = 4 GB, `d` = 8 GB). It warns on stderr if
+they disagree — `MemTotal` reads low because of the GPU carve-out, so the revision code wins.
+
+### Configuration
+
+- `PI_HOST` — host to SSH into. If unset, runs against the local machine.
+- `PI_USER` — SSH user (default: current user).
+
+See [notebook/Raspberry Pi Provisioning.md](../notebook/Raspberry%20Pi%20Provisioning.md) for the
+full imaging and setup procedure.
+
 ## Image Update Automation
 
 ### Overview

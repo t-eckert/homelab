@@ -56,6 +56,21 @@ tasks:
       - echo "Unmounted workbench directories"
     silent: false
 
+  pi:flash:
+    desc: Flash a Raspberry Pi OS image to an SD card and set up headless first boot.
+    interactive: true
+    cmds:
+      - PI_IMAGE={{.IMAGE}} ./scripts/flash-pi.sh
+    silent: true
+
+  pi:identity:
+    desc: Capture a Raspberry Pi's serial, MACs, and RAM as a Hardware.md block.
+    vars:
+      HOST: '{{.HOST | default "sdr.local"}}'
+    cmds:
+      - PI_HOST={{.HOST}} ./scripts/pi-identity.sh
+    silent: true
+
   minecraft:status:
     desc: Check Minecraft server status.
     cmds:
